@@ -1,0 +1,132 @@
+
+header {
+    background-color: #5AC8FA;
+    padding: 10px 0px 10px 0px;
+    width: 100%;
+    display: inline-block;
+    vertical-align: top;
+}
+header h1 {
+    background-color: #5AC8FA;
+}
+header ul {
+    background-color: #5AC8FA
+    padding: 30px 0px 30px 0px;
+    margin: 0px;
+    text-align: center;
+}
+
+.button {
+    background-color: #5AC8FA;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    float: left;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    border: none;
+    padding: 15px 32px;
+    font-family: "San Francisco";
+    font-weight: 100;
+}
+.button:hover {
+    background-color: #28b8fa;
+}
+.headimage {
+    background-color: #5AC8FA
+    display: inline-block;
+    vertical-align: top;
+    float: left;
+    padding: 0px 50px 0px 0px;
+}
+
+
+.thumbgroup {
+    position: relative;
+    padding: 15px;
+    float: left;
+}
+
+h2 {
+    padding: 0px 0px 0px 40px;
+}
+@font-face {
+    font-family: "San Francisco";
+    src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-ultralight-webfont.woff");
+ }
+
+#loader {
+    position: absolute;
+    left: 45%;
+    top: 40%;
+    display: none;
+    z-index:9;
+}
+.foldergroup {
+    position: relative;
+    padding: 15px;
+    float: left;
+}
+.desc {
+    color: black;
+    margin: 0 auto;
+    text-align: right;
+    font-family: "San Francisco";
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 105px;
+    padding: 0px 0px 0px 20px;
+}
+.downicon {
+    cursor: pointer;
+}
+.downicondiv {
+    position: absolute;
+    padding: 0px 0px 0px 0px;
+    margin-top: -24px;
+}
+.tooltiptext {
+    visibility: hidden;
+    background-color: #157EFB;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    font-family: "San Francisco";
+    font-size: 10px;
+    padding: 5px 10px 5px 10px;
+}
+
+.downicondiv:hover .tooltiptext {
+    visibility: visible;
+}
+.tooltip {
+    padding: 0px 0px 20px 0px;
+}
+.errortext {
+    font-family: "San Francisco";
+    font-size: 70px;
+    color: black;
+    font-weight: 200;
+    text-align: center;
+    padding: 60px 0px 50px 0px;
+}
+.errorcode {
+    font-family: "San Francisco";
+    font-size: 60px;
+    color: black;
+    font-weight: 200;
+    text-align: center;
+    padding: 40px 0px 50px 0px;
+}
+
+
+
+/*padding is: top, right, bottom, left*/
+
+
+
+
+
