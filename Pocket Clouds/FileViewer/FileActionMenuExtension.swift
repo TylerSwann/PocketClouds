@@ -19,32 +19,62 @@ extension FileViewController
         let exportToPCButton = UIAlertAction(title: "Export To Computer", style: .default, handler: {_ in self.exportToPC()})
         let exportToLibrary = UIAlertAction(title: "Export Images To library", style: .default, handler: {_ in self.exportToLibrary()})
         let printButton = UIAlertAction(title: "Print", style: .default, handler: {_ in self.printSelectedFiles()})
-        let moreButton = UIAlertAction(title: "More", style: .default, handler: {_ in self.showMoreOptionsMenu()})
+        //let moreButton = UIAlertAction(title: "More", style: .default, handler: {_ in self.showMoreOptionsMenu()})
         let loadingDemoButton = UIAlertAction(title: "Loading Demo", style: .default, handler: {_ in self.showLoadingDemo()})
-        let buttons = [loadingDemoButton, exportToPCButton, exportToLibrary, moreButton, selectAllButton, cancelButton, printButton]
+        let buttons = [loadingDemoButton, exportToPCButton, exportToLibrary, selectAllButton, cancelButton, printButton]
         for button in buttons
         {
             actionsheet.addAction(button)
         }
         self.present(actionsheet, animated: true, completion: nil)
     }
-    func showMoreOptionsMenu()
-    {
-        let activityController = UIActivityViewController(activityItems: [""], applicationActivities: nil)
-        self.present(activityController, animated: true, completion: nil)
-    }
+    
+//    func showMoreOptionsMenu()
+//    {
+//        let activityController = UIActivityViewController(activityItems: [""], applicationActivities: nil)
+//        self.present(activityController, animated: true, completion: nil)
+//    }
 
     func printSelectedFiles()
     {
-        let printerInteractionView = UIPrintInteractionController.shared
-        printerInteractionView.printingItem = self.getPathsForSelectedIndexPaths().first
-        printerInteractionView.present(from: self.actionButton, animated: true, completionHandler: {controller, completed, error in
-            if (error != nil){print(error?.localizedDescription)}
-            print("completed : \(completed)")
-            print(controller.printInfo.debugDescription)
-        })
+        let filePathsToPrint = self.getPathsForSelectedIndexPaths()
+        var hasError = false
+        var errorMessage = ""
+        var imagesToPrint = [UIImage]()
+        var textFilesToPrint = [NSURL]()
+        
+        for filepath in filePathsToPrint where UIPrintInteractionController.canPrint(filepath.toURL())
+        {
+            if (UIPrintInteractionController.canPrint(filepath.toURL()) == false){continue}
+            let mediatype = filepath.mediatype()
+            switch(mediatype)
+            {
+            case .image:
+                if let image = UIImage(contentsOfFile: filepath){imagesToPrint.append(image)}
+                else {hasError = true; errorMessage = "Couldn't print some images"}
+            case .text: textFilesToPrint.append(filepath.toNSURL())
+            default: break;
+            }
+        }
+        
+        let imagePrinterController = UIPrintInteractionController.shared
+        let imageFormatter = UIViewPrintFormatter()
+        imagePrinterController.printFormatter = imageFormatter
+        imagePrinterController.printingItems = imagesToPrint
+        
+//        guard let testprintdoc1 = try? String.init(contentsOfFile: filePathsToPrint[0])else{print("couldn't get text file"); return}
+//        let printerController = UIPrintInteractionController.shared
+//        let formatter = UIMarkupTextPrintFormatter(markupText: testprintdoc1)
+//        printerController.printFormatter = formatter
+//        printerController.printingItem = testprintdoc1
+//        printerController.present(animated: true, completionHandler: {controller, completed, error in
+//            if let printError = error, !completed
+//            {
+//                print("Printing error  :  \(printError.localizedDescription)")
+//            }
+//            print("Completed? \(completed), error? \(error.debugDescription)")
+//        })
     }
-    
     
     func exportToPC()
     {
@@ -103,6 +133,7 @@ extension FileViewController
         }
         DispatchQueue.main.async{progressRing.dismiss(); self.changeCurrentState(to: .normal)}
     }
+    
     func getPathsForSelectedIndexPaths() -> [String]
     {
         var selectedFilePaths = [String]()
@@ -113,6 +144,7 @@ extension FileViewController
         })
         return selectedFilePaths
     }
+    
     func getSelectedIndexPaths() -> [IndexPath]
     {
         var indexPathsForSelectedItems = [IndexPath]()
@@ -165,3 +197,9 @@ extension FileViewController
         }
     }
 }
+
+
+
+
+
+
