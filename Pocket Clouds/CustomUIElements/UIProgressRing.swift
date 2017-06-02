@@ -107,15 +107,33 @@ open class UIProgressRing
     }
     @objc private func adjustCenterForOrientation()
     {
-        self.superViewSize = CGSize(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)
-        self.superViewCenter = self.viewController.view.center
-        self.center = CGPoint(x: (self.superViewSize.width / 2.0), y: (self.superViewSize.height / 2.0))
-        if (UIDevice.current.orientation == .portrait){self.center.y -= (self.size.height / 2)}
-        self.view.center = self.center
-        self.progressRing.center = self.center
-        self.progressRing.center.y -= (self.progressRing.frame.size.height / 7)
-        self.label.center = self.center
-        self.label.center.y += (self.size.height / 2) - (self.label.frame.size.height / 2)
+        if (self.viewController.orientationIsLocked(toOrientation: .portrait) ==  false)
+        {
+            if (UIDevice.current.orientation == .portrait)
+            {
+                self.superViewSize = CGSize(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)
+                self.superViewCenter = self.viewController.view.center
+                self.center = CGPoint(x: (self.superViewSize.width / 2.0), y: (self.superViewSize.height / 2.0))
+                self.center.y -= (self.size.height / 2)
+                self.view.center = self.center
+                self.progressRing.center = self.center
+                self.progressRing.center.y -= (self.progressRing.frame.size.height / 7)
+                self.label.center = self.center
+                self.label.center.y += (self.size.height / 2) - (self.label.frame.size.height / 2)
+            }
+            else if (UIDevice.current.orientation == .landscapeLeft ||
+                     UIDevice.current.orientation == .landscapeRight)
+            {
+                self.superViewSize = CGSize(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)
+                self.superViewCenter = self.viewController.view.center
+                self.center = CGPoint(x: (self.superViewSize.width / 2.0), y: (self.superViewSize.height / 2.0))
+                self.view.center = self.center
+                self.progressRing.center = self.center
+                self.progressRing.center.y -= (self.progressRing.frame.size.height / 7)
+                self.label.center = self.center
+                self.label.center.y += (self.size.height / 2) - (self.label.frame.size.height / 2)
+            }
+        }
     }
 }
 
