@@ -56,7 +56,6 @@ class AuthenticationView: Adaptable
         let center = CGPoint(x: (parentSize.width / CGFloat(2)), y: (parentSize.height / CGFloat(2)))
         self.view = UIView(frame: CGRect(x: 0, y: 0, width: parentSize.width, height: parentSize.height))
         self.view.center = center
-        //self.view.applyBlurEffect(withBlurStyle: style ?? .regular, andRoundCornersToRadius: 0)
         self.view.applyBlurEffect(usingStyle: style, withVibrancy: true)
     }
     

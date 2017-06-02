@@ -23,6 +23,7 @@
 		2F4D67D71EA5351B00A81573 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F4D67D51EA5351B00A81573 /* LaunchScreen.storyboard */; };
 		2F4D67F31EA53AB400A81573 /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D67F21EA53AB400A81573 /* Cells.swift */; };
 		2F4D68001EA67DE000A81573 /* MediaPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D67FF1EA67DE000A81573 /* MediaPickerViewController.swift */; };
+		2F6E5A1F1EE1CB2100B36CD8 /* FileActionMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6E5A1E1EE1CB2100B36CD8 /* FileActionMenuView.swift */; };
 		2F76FF871EBFAA25004B69AB /* DeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F76FF861EBFAA25004B69AB /* DeviceModel.swift */; };
 		2F799F001EDB09F000FF7E18 /* FileActionMenuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F799EFF1EDB09F000FF7E18 /* FileActionMenuExtension.swift */; };
 		2F799F041EDB453400FF7E18 /* UIProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F799F031EDB453400FF7E18 /* UIProgressRing.swift */; };
@@ -75,6 +76,7 @@
 		2F4D67D81EA5351B00A81573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F4D67F21EA53AB400A81573 /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cells.swift; path = ../Cells.swift; sourceTree = "<group>"; };
 		2F4D67FF1EA67DE000A81573 /* MediaPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MediaPickerViewController.swift; path = ../MediaPickerViewController.swift; sourceTree = "<group>"; };
+		2F6E5A1E1EE1CB2100B36CD8 /* FileActionMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileActionMenuView.swift; sourceTree = "<group>"; };
 		2F76FF861EBFAA25004B69AB /* DeviceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceModel.swift; path = ../../DeviceModel.swift; sourceTree = "<group>"; };
 		2F799EFF1EDB09F000FF7E18 /* FileActionMenuExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileActionMenuExtension.swift; sourceTree = "<group>"; };
 		2F799F031EDB453400FF7E18 /* UIProgressRing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIProgressRing.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 		2F4D67CB1EA5351B00A81573 /* Pocket Clouds */ = {
 			isa = PBXGroup;
 			children = (
+				2F6E5A1D1EE1CB0900B36CD8 /* ActionMenu */,
 				2FF9E3341ED322930038DD41 /* FileViewer */,
 				2F2A39231EC23B1F00360C19 /* CustomUIElements */,
 				2F2A391A1EC114EC00360C19 /* Settings */,
@@ -218,6 +221,14 @@
 				2F4D67D81EA5351B00A81573 /* Info.plist */,
 			);
 			path = "Pocket Clouds";
+			sourceTree = "<group>";
+		};
+		2F6E5A1D1EE1CB0900B36CD8 /* ActionMenu */ = {
+			isa = PBXGroup;
+			children = (
+				2F6E5A1E1EE1CB2100B36CD8 /* FileActionMenuView.swift */,
+			);
+			name = ActionMenu;
 			sourceTree = "<group>";
 		};
 		2FE10D0D1EC8E87D005F36D9 /* Various */ = {
@@ -422,6 +433,7 @@
 				2F7D154E1EAE99CC000490A6 /* Protocols.swift in Sources */,
 				2F7D154D1EAE99CC000490A6 /* NativeExtensions.swift in Sources */,
 				2F799F041EDB453400FF7E18 /* UIProgressRing.swift in Sources */,
+				2F6E5A1F1EE1CB2100B36CD8 /* FileActionMenuView.swift in Sources */,
 				2FE696001EB7D3F7005A9937 /* DependencyLinks.swift in Sources */,
 				2F2A39331EC4D7D500360C19 /* EmailSettingsView.swift in Sources */,
 				2FF151F51ECF654F00E596DA /* ImageViewController.swift in Sources */,

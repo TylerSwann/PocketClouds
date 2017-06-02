@@ -75,6 +75,14 @@ extension UIView
 
 extension UIViewController
 {
+    func orientationIsLocked(toOrientation orientation: UIInterfaceOrientationMask) -> Bool
+    {
+        if let appdelegate = UIApplication.shared.delegate as? AppDelegate
+        {
+            return appdelegate.orientationLock == orientation
+        }
+        else {return true}
+    }
     func lockOrientations(allowingOnly allowedOrientation: UIInterfaceOrientationMask)
     {
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate

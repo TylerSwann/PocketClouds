@@ -18,10 +18,8 @@ extension FileViewController
         let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let exportToPCButton = UIAlertAction(title: "Export To Computer", style: .default, handler: {_ in self.exportToPC()})
         let exportToLibrary = UIAlertAction(title: "Export Images To library", style: .default, handler: {_ in self.exportToLibrary()})
-        let printButton = UIAlertAction(title: "Print", style: .default, handler: {_ in self.printSelectedFiles()})
-        //let moreButton = UIAlertAction(title: "More", style: .default, handler: {_ in self.showMoreOptionsMenu()})
         let loadingDemoButton = UIAlertAction(title: "Loading Demo", style: .default, handler: {_ in self.showLoadingDemo()})
-        let buttons = [loadingDemoButton, exportToPCButton, exportToLibrary, selectAllButton, cancelButton, printButton]
+        let buttons = [loadingDemoButton, exportToPCButton, exportToLibrary, selectAllButton, cancelButton]
         for button in buttons
         {
             actionsheet.addAction(button)
@@ -34,47 +32,80 @@ extension FileViewController
 //        let activityController = UIActivityViewController(activityItems: [""], applicationActivities: nil)
 //        self.present(activityController, animated: true, completion: nil)
 //    }
-
-    func printSelectedFiles()
-    {
-        let filePathsToPrint = self.getPathsForSelectedIndexPaths()
-        var hasError = false
-        var errorMessage = ""
-        var imagesToPrint = [UIImage]()
-        var textFilesToPrint = [NSURL]()
-        
-        for filepath in filePathsToPrint where UIPrintInteractionController.canPrint(filepath.toURL())
-        {
-            if (UIPrintInteractionController.canPrint(filepath.toURL()) == false){continue}
-            let mediatype = filepath.mediatype()
-            switch(mediatype)
-            {
-            case .image:
-                if let image = UIImage(contentsOfFile: filepath){imagesToPrint.append(image)}
-                else {hasError = true; errorMessage = "Couldn't print some images"}
-            case .text: textFilesToPrint.append(filepath.toNSURL())
-            default: break;
-            }
-        }
-        
-        let imagePrinterController = UIPrintInteractionController.shared
-        let imageFormatter = UIViewPrintFormatter()
-        imagePrinterController.printFormatter = imageFormatter
-        imagePrinterController.printingItems = imagesToPrint
-        
-//        guard let testprintdoc1 = try? String.init(contentsOfFile: filePathsToPrint[0])else{print("couldn't get text file"); return}
+//
+//    func printSelectedFiles()
+//    {
 //        let printerController = UIPrintInteractionController.shared
-//        let formatter = UIMarkupTextPrintFormatter(markupText: testprintdoc1)
-//        printerController.printFormatter = formatter
-//        printerController.printingItem = testprintdoc1
-//        printerController.present(animated: true, completionHandler: {controller, completed, error in
-//            if let printError = error, !completed
+//        let selectedPaths = self.getPathsForSelectedIndexPaths()
+//        if let pathToPrint = selectedPaths.first,
+//            let textFile = String.init(contentsOf: pathToPrint.toURL())
+//        {
+//            let formatter = UIMarkupTextPrintFormatter(markupText: pathToPrint)
+//            printerController.printFormatter = formatter
+//            printerController.printingItem = pathToPrint.toURL()
+//            printerController.present(animated: true, completionHandler: {_, completed, error in
+//                if let printerror = error
+//                {
+//                    if (!completed)
+//                    {
+//                        self.createMessageBox(withMessage: printerror.localizedDescription, title: "Print Error", andShowOnViewController: self)
+//                    }
+//                }
+//            })
+//        }
+//        let filePathsToPrint = self.getPathsForSelectedIndexPaths()
+//        var hasError = false
+//        var errorMessage = ""
+//        var imagesToPrint = [UIImage]()
+//        var textFilesToPrint = [NSURL]()
+//        
+//        for filepath in filePathsToPrint where UIPrintInteractionController.canPrint(filepath.toURL())
+//        {
+//            if (UIPrintInteractionController.canPrint(filepath.toURL()) == false){continue}
+//            let mediatype = filepath.mediatype()
+//            switch(mediatype)
 //            {
-//                print("Printing error  :  \(printError.localizedDescription)")
+//            case .image:
+//                if let image = UIImage(contentsOfFile: filepath){imagesToPrint.append(image)}
+//                else {hasError = true; errorMessage = "Couldn't print some images"}
+//            case .text: textFilesToPrint.append(filepath.toNSURL())
+//            default: break;
 //            }
-//            print("Completed? \(completed), error? \(error.debugDescription)")
-//        })
-    }
+//        }
+//        
+//        if (imagesToPrint.count > 0)
+//        {
+//            let imagePrinterController = UIPrintInteractionController.shared
+//            let imageFormatter = UIViewPrintFormatter()
+//            imagePrinterController.printFormatter = imageFormatter
+//            imagePrinterController.printingItems = imagesToPrint
+//            imagePrinterController.present(animated: true, completionHandler: {controller, completed, error in
+//                if let printError = error
+//                {
+//                    if (!completed){errorMessage = printError.localizedDescription; hasError = true}
+//                }
+//            })
+//        }
+//        
+//        else if (textFilesToPrint.count > 0)
+//        {
+//            let textPrinterController = UIPrintInteractionController.shared
+//            let textFormatter = UIMarkupTextPrintFormatter()
+//            textPrinterController.printFormatter = textFormatter
+//            textPrinterController.printingItems = textFilesToPrint
+//            textPrinterController.present(animated: true, completionHandler: {_, completed, error in
+//                if let printError = error
+//                {
+//                    if(!completed){hasError = true; errorMessage = printError.localizedDescription}
+//                }
+//            })
+//        }
+//        
+//        if (hasError)
+//        {
+//            self.createMessageBox(withMessage: errorMessage, title: "Print error", andShowOnViewController: self)
+//        }
+//    }
     
     func exportToPC()
     {

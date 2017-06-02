@@ -294,6 +294,9 @@ class FileViewController: FileViewer, ErrorNotifiable
             case .normal:
                 switch (mediatype)
                 {
+                case .text:
+                    let actionMenu = FileActionMenuView()
+                    self.navigationController?.pushViewController(actionMenu, animated: true)
                 case .pdf:
                     let webViewController = WebViewController()
                     webViewController.incomingFilepath = path
