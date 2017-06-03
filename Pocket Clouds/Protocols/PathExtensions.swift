@@ -22,6 +22,7 @@ enum PathExtension: String
     case js     =   "js"
     case mov    =   "mov"
     case mp4    =   "mp4"
+    case rtf    =   "rtf"
     case uknown =   "uknown"
     case directory = ""
 }
@@ -34,7 +35,7 @@ extension String
         {
         case .bmp, .jpeg, .jpg, .png, .tif, .tiff:  return .image
         case .mov, .mp4:                            return .video
-        case .txt, .js:                             return .text
+        case .txt, .js, .rtf:                       return .text
         case .directory:                            return .directory
         case .pdf:                                  return .pdf
         default:                                    return .unknown
@@ -58,6 +59,7 @@ extension String
         case    "js"    :  return .js
         case    "mov"   :  return .mov
         case    "mp4"   :  return .mp4
+        case    "rtf"   :  return .rtf
         default         :  return .uknown
         }
     }
