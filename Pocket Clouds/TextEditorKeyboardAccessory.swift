@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import FontAwesome_swift
 
 
 class TextEditorKeyboardAccessory: UIToolbar
@@ -40,11 +41,17 @@ class TextEditorKeyboardAccessory: UIToolbar
     private func setup()
     {
         self.frame = CGRect(x: 0, y: 0, width: self.superViewSize.width, height: 44)
-        let textAlignmentButton = UIBarButtonItem(image: #imageLiteral(resourceName: "TextAlignmentCenterIcon25"), style: .plain, target: self, action: #selector(textAlignmentClick))
-        let fontSizeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "FontSizeIcon25"), style: .plain, target: self, action: #selector(fontSizeClick))
+        let iconSize = CGSize(width: 35, height: 35)
+        let centerAlignIcon = UIImage.fontAwesomeIcon(name: .alignCenter, textColor: UIColor.calmBlue, size: iconSize)
+        let fontIcon = UIImage.fontAwesomeIcon(name: .font, textColor: UIColor.calmBlue, size: iconSize)
+        let fontSizeIcon = UIImage.fontAwesomeIcon(name: .textHeight, textColor: UIColor.calmBlue, size: iconSize)
+        
+        let textAlignmentButton = UIBarButtonItem(image: centerAlignIcon, style: .plain, target: self, action: #selector(textAlignmentClick))
+        let fontSizeButton = UIBarButtonItem(image: fontSizeIcon, style: .plain, target: self, action: #selector(fontSizeClick))
         let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeClick))
-        let fontButton = UIBarButtonItem(image: #imageLiteral(resourceName: "FontIcon25"), style: .plain, target: self, action: #selector(fontClick))
+        let fontButton = UIBarButtonItem(image: fontIcon, style: .plain, target: self, action: #selector(fontClick))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        
         self.items = [fontSizeButton, textAlignmentButton, fontButton, flexibleSpace, closeButton]
         self.sizeToFit()
         self.textAlignmentButton = textAlignmentButton
