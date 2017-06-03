@@ -295,8 +295,12 @@ class FileViewController: FileViewer, ErrorNotifiable
                 switch (mediatype)
                 {
                 case .text:
-                    let actionMenu = FileActionMenuView()
-                    self.navigationController?.pushViewController(actionMenu, animated: true)
+                    let rtfpath = path
+                    let richtextViewController = RichTextViewController()
+                    richtextViewController.incommingFilePath = rtfpath
+                    let navController = UINavigationController(rootViewController: richtextViewController)
+                    self.navigationItem.title = ""
+                    self.present(navController, animated: true, completion: nil)
                 case .pdf:
                     let webViewController = WebViewController()
                     webViewController.incomingFilepath = path

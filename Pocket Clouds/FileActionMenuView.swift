@@ -11,16 +11,16 @@ import UIKit
 
 class FileActionMenuView: UIViewController, UIDocumentInteractionControllerDelegate
 {
-    var toolbar = UIToolbar()
-    var actionbutton = UIBarButtonItem()
-    var documentController = UIDocumentInteractionController()
+    weak var toolbar: UIToolbar?
+    weak var actionbutton:UIBarButtonItem?
     var center = CGPoint()
     var size = CGSize()
     
-    var displayedFilePath = ""
+    var incommingFilePath = ""
     
     override func viewDidLoad()
     {
+        
         self.setup()
     }
     
@@ -28,33 +28,44 @@ class FileActionMenuView: UIViewController, UIDocumentInteractionControllerDeleg
     {
         self.size = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
         self.center = CGPoint(x: (self.size.width / 2), y: (self.size.height / 2))
-        self.toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.size.width, height: 44))
-        self.toolbar.center = self.center
-        self.toolbar.center.y += ((self.size.height / 2) - (self.toolbar.frame.size.height / 2))
-        self.actionbutton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionClick))
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
-        self.toolbar.setItems([self.actionbutton, flexibleSpace], animated: true)
-        self.documentController = UIDocumentInteractionController()
-        self.documentController.delegate = self
-        self.view.backgroundColor = UIColor.white
         
-        self.view.addSubview(self.toolbar)
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.size.width, height: 44))
+        toolbar.center = self.center
+        toolbar.center.y += ((self.size.height / 2) - (toolbar.frame.size.height / 2))
+        let actionbutton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionClick))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
+        toolbar.setItems([actionbutton, flexibleSpace], animated: true)
+        self.toolbar = toolbar
+        self.actionbutton = actionbutton
+        self.view.backgroundColor = UIColor.white
         NotificationCenter.default.addObserver(self, selector: #selector(adjustToolBar),
                                                name: NSNotification.Name.UIDeviceOrientationDidChange,
                                                object: nil)
     }
+    func addsubviews()
+    {
+        self.view.addSubview(self.toolbar ?? UIToolbar())
+    }
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController
+    {
+        return self
+    }
+    
+    
+    
     
     @objc func actionClick()
     {
-        self.documentController.url = self.displayedFilePath.toURL()
+        
     }
     @objc private func adjustToolBar()
     {
         self.size = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
         self.center = CGPoint(x: (self.size.width / 2), y: (self.size.height / 2))
-        self.toolbar.frame.size.width = self.size.width
-        self.toolbar.center = self.center
-        self.toolbar.center.y += ((self.size.height / 2) - (self.toolbar.frame.size.height / 2))
+        self.toolbar?.frame.size.width = self.size.width
+        self.toolbar?.center = self.center
+        self.toolbar?.center.y += ((self.size.height / 2) - (self.toolbar?.frame.size.height ?? CGFloat(0) / 2))
     }
 }
 
