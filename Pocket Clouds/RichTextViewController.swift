@@ -45,6 +45,7 @@ class RichTextViewController: FileActionMenuView,
         self.textview.isEditable = true
         self.textview.inputAccessoryView = editorKeyboardBar
         self.view.addSubview(self.textview)
+        self.textview.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.addsubviews()
     }
     override func viewWillAppear(_ animated: Bool)

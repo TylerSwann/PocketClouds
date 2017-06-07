@@ -38,9 +38,6 @@ class FileActionMenuView: UIViewController, UIDocumentInteractionControllerDeleg
         self.toolbar = toolbar
         self.actionbutton = actionbutton
         self.view.backgroundColor = UIColor.white
-//        NotificationCenter.default.addObserver(self, selector: #selector(adjustToolBar),
-//                                               name: NSNotification.Name.UIDeviceOrientationDidChange,
-//                                               object: nil)
     }
     func addsubviews()
     {
@@ -51,24 +48,12 @@ class FileActionMenuView: UIViewController, UIDocumentInteractionControllerDeleg
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController
     {
         return self
-    }
-    
-    
-    
+    }  
     
     @objc func actionClick()
     {
         
     }
-//    @objc private func adjustToolBar()
-//    {
-//        guard let toolbar = self.toolbar else {print("Couldnt cast action toolbar"); return}
-//        self.size = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
-//        self.center = CGPoint(x: (self.size.width / 2), y: (self.size.height / 2))
-//        self.toolbar?.frame.size.width = self.size.width
-//        self.toolbar?.center = self.center
-//        self.toolbar?.center.y += ((self.size.height / 2) - ((toolbar.frame.size.height / 2)))
-//    }
 }
 
 
