@@ -71,6 +71,35 @@ extension UIView
     }
 }
 
+extension NSTextAlignment
+{
+    func debugDescription() -> String
+    {
+        switch(self)
+        {
+        case .center: return "Text align center"
+        case .justified: return "Text align justified"
+        case .left: return "Text align left"
+        case .natural: return "Text align natural"
+        case .right: return "Text align right"
+        }
+    }
+}
+//case left // Visually left aligned
+//
+//
+//case center // Visually centered
+//
+//case right // Visually right aligned
+//
+///* !TARGET_OS_IPHONE */
+//// Visually right aligned
+//// Visually centered
+//
+//case justified // Fully-justified. The last line in a paragraph is natural-aligned.
+//
+//case natural // Indicates the default alignment for script
+
 extension UIViewController
 {
     func orientationIsLocked(toOrientation orientation: UIInterfaceOrientationMask) -> Bool

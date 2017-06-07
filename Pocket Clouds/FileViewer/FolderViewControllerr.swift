@@ -36,7 +36,7 @@ class FoldersViewController: FileViewController
     
     override func viewWillDisappear(_ animated: Bool){}
     
-    override func adjustToolBar()
+    func adjustToolBar()
     {
         self.center = CGPoint(x: (self.view.bounds.size.width  / CGFloat(2)), y: (self.view.bounds.size.height / CGFloat(2)))
         self.toolbar.center = self.center

@@ -38,8 +38,6 @@ class FileViewer: UIViewController,
     override func viewDidLoad()
     {
         self.setup()
-        NotificationCenter.default.addObserver(self, selector: #selector(adjustToolBar),
-                                               name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
     }
     
     
@@ -102,6 +100,7 @@ class FileViewer: UIViewController,
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(self.collectionView)
         self.view.addSubview(toolbar)
+        self.toolbar.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         self.pinViewToSuperView(self.collectionView)
     }
     
@@ -160,17 +159,6 @@ class FileViewer: UIViewController,
             }
         }
     }
-    
-    @objc func adjustToolBar()
-    {
-        self.center = CGPoint(x: (self.view.bounds.size.width  / CGFloat(2)), y: (self.view.bounds.size.height / CGFloat(2)))
-        self.toolbar.center = self.center
-        self.toolbar.center.x = 0
-        self.toolbar.frame.origin.x = 0
-        self.toolbar.center.y += ((self.view.frame.height / 2) - (self.toolbar.frame.height / 2))
-        self.toolbar.frame.size.width = self.view.bounds.width
-    }
-    
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int

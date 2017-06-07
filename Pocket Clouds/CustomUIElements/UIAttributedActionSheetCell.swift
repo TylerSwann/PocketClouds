@@ -11,22 +11,14 @@ import UIKit
 
 open class UIAttributedActionSheetCell: UITableViewCell
 {
-    open var label = UILabel()
     
     override public init(style: UITableViewCellStyle, reuseIdentifier: String?)
     {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.label = UILabel(frame: self.frame)
-        self.label.textAlignment = .right
-        self.label.center = CGPoint(x: (self.frame.size.width / 2), y: (self.frame.size.height / 2))
-        self.label.adjustsFontSizeToFitWidth = true
+        self.accessoryType = .none
+        self.selectionStyle = .none
+        self.textLabel?.textAlignment = .center
         self.backgroundColor = UIColor.clear
-        self.addSubview(label)
-    }
-    public func refresh()
-    {
-        label.attributedText = nil
-        label.text = nil
     }
     required public init?(coder aDecoder: NSCoder)
     {
