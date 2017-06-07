@@ -18,9 +18,9 @@ extension TextEditorKeyboardDelegate
 {
     func showKeyboard(){self.textview.becomeFirstResponder()}
     func hideKeyboard(){self.textview.resignFirstResponder()}
-    func changeSelectedText(toSize size: CGFloat){self.addTextAttribute([NSFontAttributeName : UIFont.systemFont(ofSize: size)])}
+    func changeSelectedText(toSize size: CGFloat){self.changeFontsize(toSize: size)}
     func changeSelectedText(toColor color: UIColor){self.addTextAttribute([NSForegroundColorAttributeName : color])}
-    func changeSelectedText(toFont font: UIFont){self.addTextAttribute([NSFontAttributeName : font])}
+    func changeSelectedText(toFont font: UIFont){self.changeFont(toFont: font)}
     func changeSelectedText(alignmentTo alignment: NSTextAlignment){self.addTextAttribute([NSParagraphStyleAttributeName : alignment])}
     
     private func addTextAttribute(_ attribute: [String : Any])
@@ -29,6 +29,42 @@ extension TextEditorKeyboardDelegate
         let selectedRange = self.textview.selectedRange
         let attributedString = NSMutableAttributedString(attributedString: self.textview.attributedText)
         attributedString.addAttributes(attribute, range: self.textview.selectedRange)
+        self.textview.attributedText = attributedString
+        self.textview.selectedRange = selectedRange
+        self.textview.scrollRangeToVisible(self.textview.selectedRange)
+    }
+    
+    private func changeFont(toFont font: UIFont)
+    {
+        let selectedRange = self.textview.selectedRange
+        let attributedString = NSMutableAttributedString(attributedString: self.textview.attributedText)
+        attributedString.enumerateAttribute(NSFontAttributeName,
+                                            in: selectedRange,
+                                            options: [],
+                                            using: {value, range, stop in
+                                                guard let currentFont = value as? UIFont else {return}
+                                                let currentFontSize = currentFont.fontDescriptor.pointSize
+                                                let newFont = UIFont(descriptor: font.fontDescriptor, size: currentFontSize)
+                                                attributedString.addAttributes([NSFontAttributeName : newFont], range: range)
+        })
+        self.textview.attributedText = attributedString
+        self.textview.selectedRange = selectedRange
+        self.textview.scrollRangeToVisible(self.textview.selectedRange)
+    }
+    
+    private func changeFontsize(toSize size: CGFloat)
+    {
+        let selectedRange = self.textview.selectedRange
+        let attributedString = NSMutableAttributedString(attributedString: self.textview.attributedText)
+        attributedString.enumerateAttribute(NSFontAttributeName,
+                                            in: selectedRange,
+                                            options: [],
+                                            using: {value, range, stop in
+                                                guard let currentFont = value as? UIFont else {return}
+                                                let currentFontDescriptor = currentFont.fontDescriptor
+                                                let resizedFont = UIFont(descriptor: currentFontDescriptor, size: size)
+                                                attributedString.addAttributes([NSFontAttributeName : resizedFont], range: range)
+        })
         self.textview.attributedText = attributedString
         self.textview.selectedRange = selectedRange
         self.textview.scrollRangeToVisible(self.textview.selectedRange)

@@ -26,6 +26,7 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     private lazy var superViewCenter: CGPoint = {return CGPoint.init(x: (self.superViewSize.width / 2), y: (self.superViewSize.height / 2))}()
     private let iconSize = CGSize(width: 35, height: 35)
     private var fontpreviews = [NSAttributedString]()
+    private var fonts = [UIFont]()
     private var attributedActionSheet = UIAttributedActionSheet()
     
     var viewController: UIViewController
@@ -89,6 +90,7 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
                                                             guard let currentfont = value as? UIFont else{return}
                                                             let newFontDescriptor = currentfont.fontDescriptor
                                                             let newFont = UIFont(descriptor: newFontDescriptor, size: 17)
+                                                            self.fonts.append(newFont)
                                                             attributedString.addAttributes([NSFontAttributeName : newFont], range: range)
                     })
                     self.fontpreviews.append(attributedString)
@@ -111,8 +113,10 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     
     private func showFontDialog()
     {
+        let selectedRange = self.textview.selectedRange
         self.textview.resignFirstResponder()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {self.attributedActionSheet.show()})
+        self.attributedActionSheet.show()
+        self.textview.selectedRange = selectedRange
     }
     
     
@@ -175,7 +179,8 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     }
     func attributedActionSheet(didSelectRowAt index: Int)
     {
-        print("You selected font : \(index)")
+        self.textview.becomeFirstResponder()
+        self.textDelegate?.changeSelectedText(toFont: self.fonts[index])
     }
     
     
