@@ -12,7 +12,6 @@ import Photos
 import LocalAuthentication
 
 
-
 extension UIView
 {
     func setViewHidden(hidden: Bool, animated: Bool)
@@ -71,17 +70,6 @@ extension UIView
         
     }
 }
-//
-//extension UITextView
-//{
-//    func textRangeFromNSRange(range:NSRange) -> UITextRange?
-//    {
-//        let beginning = self.beginningOfDocument
-//        guard let start = self.position(from: beginning, offset: range.location) else {return nil}
-//        guard let end = self.position(from: start, offset: range.length) else {return nil}
-//        return self.textRange(from: start, to: end)
-//    }
-//}
 
 extension UIViewController
 {

@@ -25,6 +25,7 @@ extension TextEditorKeyboardDelegate
     
     private func addTextAttribute(_ attribute: [String : Any])
     {
+        if(attribute.keys.first == NSParagraphStyleAttributeName){return}
         let selectedRange = self.textview.selectedRange
         let attributedString = NSMutableAttributedString(attributedString: self.textview.attributedText)
         attributedString.addAttributes(attribute, range: self.textview.selectedRange)

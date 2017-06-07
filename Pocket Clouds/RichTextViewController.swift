@@ -30,7 +30,7 @@ class RichTextViewController: FileActionMenuView,
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelClick))
         let saveButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveClick))
         
-        let editorKeyboardBar = TextEditorKeyboardAccessory(viewForPresenting: self.view)
+        let editorKeyboardBar = TextEditorKeyboardAccessory(presentOn: self, textview: self.textview)
         editorKeyboardBar.textDelegate = self
         
         self.editorKeyboardBar = editorKeyboardBar

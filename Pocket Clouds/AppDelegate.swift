@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -26,9 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let originalViewController = self.window?.rootViewController else {print("error in didFinishLaunchingWithOptions"); return false}
         authenticationView.viewController = originalViewController
         authenticationView.show()
-        DispatchQueue.main.async {
-            self.authenticationView.authenticate()
-        }
+        DispatchQueue.main.async {self.authenticationView.authenticate()}
         return true
     }
 
