@@ -112,8 +112,7 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     private func showFontDialog()
     {
         self.textview.resignFirstResponder()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {self.attributedActionSheet.show()})
-        print("show")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {self.attributedActionSheet.show()})
     }
     
     
@@ -174,9 +173,9 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     {
         return self.fontpreviews[index]
     }
-    func attributedActionSheetDidPressDone()
+    func attributedActionSheet(didSelectRowAt index: Int)
     {
-        print("Done!")
+        print("You selected font : \(index)")
     }
     
     

@@ -19,9 +19,11 @@ open class UIAttributedActionSheet: NSObject,
     private lazy var view: UIView = {return UIView()}()
     private var center = CGPoint.zero
     
-    open private(set) var viewController: UIViewController
+    open var allowsMultiSelection = false
+    open var toolbarItems: [UIBarButtonItem]?
     open var delegate: UIAttributedActionSheetDelegate?
     open private(set) var isHidden = true
+    open private(set) var viewController: UIViewController
     
     private weak var tableview: UITableView?
     private weak var toolbar: UIToolbar?
@@ -40,9 +42,11 @@ open class UIAttributedActionSheet: NSObject,
     private func setup()
     {
         let tableview = UITableView(frame: CGRect.init(x: 0, y: 0, width: self.superViewSize.width, height: (self.superViewSize.height / 2.3)), style: .plain)
+        
         tableview.register(UIAttributedActionSheetCell.self, forCellReuseIdentifier: self.reuseIdentifier)
         tableview.delegate = self
         tableview.dataSource = self
+        tableview.allowsMultipleSelection = self.allowsMultiSelection
         
         let toolbar = UIToolbar(frame: CGRect(origin: CGPoint.zero, size: CGSize.init(width: self.superViewSize.width, height: 44)))
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClick))
@@ -57,7 +61,6 @@ open class UIAttributedActionSheet: NSObject,
         self.view.isUserInteractionEnabled = true
         self.view.center = self.superViewCenter
         self.view.center.y += ((self.superViewSize.height / 2) - (self.view.frame.size.height / 2))
-        
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         blurView.frame = self.view.frame
         self.view = blurView
@@ -70,19 +73,23 @@ open class UIAttributedActionSheet: NSObject,
         toolbar.center = self.center
         toolbar.center.y -= (self.center.y - (toolbar.frame.size.height / 2))
         self.view.center.y += self.viewController.view.frame.size.height
+        
         tableview.isHidden = false
         toolbar.isHidden = false
         self.view.isHidden = false
         self.tableview = tableview
         self.doneButton = doneButton
         self.toolbar = toolbar
-        
         self.needsSetup = false
+        self.view.autoresizingMask = [.flexibleWidth, .flexibleTopMargin, .flexibleHeight]
+        self.tableview?.autoresizingMask = [.flexibleWidth, .flexibleTopMargin, .flexibleHeight]
+        self.toolbar?.autoresizingMask = [.flexibleWidth]
     }
     open func show()
     {
         if(needsSetup){self.setup()}
         else if (!self.isHidden){self.dismiss(); return}
+        self.view.isHidden = false
         UIView.animate(withDuration: animationDuration, animations: {
             self.view.center.y -= self.viewController.view.frame.size.height
         }, completion: {_ in self.isHidden = false})
@@ -92,12 +99,27 @@ open class UIAttributedActionSheet: NSObject,
         if (self.isHidden){self.show(); return}
         UIView.animate(withDuration: animationDuration, animations: {
             self.view.center.y += self.viewController.view.frame.size.height
-        }, completion: {_ in self.isHidden = true})
+        }, completion: {_ in self.isHidden = true; self.view.isHidden = true})
     }
     @objc private func doneClick()
     {
         self.delegate?.attributedActionSheetDidPressDone?()
         self.dismiss()
+    }
+    
+    public func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath)
+    {
+        if let cell = tableView.cellForRow(at: indexPath) as? UIAttributedActionSheetCell
+        {
+            UIView.animate(withDuration: 0.1, animations: {cell.textLabel?.alpha = CGFloat(0.1)})
+        }
+    }
+    public func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath)
+    {
+        if let cell = tableView.cellForRow(at: indexPath) as? UIAttributedActionSheetCell
+        {
+            UIView.animate(withDuration: 0.2, animations: {cell.textLabel?.alpha = CGFloat(1.0)})
+        }
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -108,12 +130,26 @@ open class UIAttributedActionSheet: NSObject,
     {
         if let cell = tableView.dequeueReusableCell(withIdentifier: self.reuseIdentifier, for: indexPath) as? UIAttributedActionSheetCell
         {
-            cell.refresh()
-            cell.label.attributedText = self.delegate?.attributedActionSheet(titleForRowAt: indexPath.item)
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.textLabel?.attributedText = self.delegate?.attributedActionSheet(titleForRowAt: indexPath.item)
             return cell
         }
         else {return UIAttributedActionSheetCell()}
     }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        self.delegate?.attributedActionSheet?(didSelectRowAt: indexPath.item)
+        if (self.allowsMultiSelection == false){self.dismiss()}
+    }
+    public func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath)
+    {
+        self.delegate?.attributedActionSheet?(didDeSelectRowAt: indexPath.item)
+    }
 }
+
+
+
+
 
 
