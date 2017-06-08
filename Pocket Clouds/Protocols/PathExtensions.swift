@@ -23,6 +23,9 @@ enum PathExtension: String
     case mov    =   "mov"
     case mp4    =   "mp4"
     case rtf    =   "rtf"
+    case doc    =   "doc"
+    case docx   =   "docx"
+    case swift  =   "swift"
     case uknown =   "uknown"
     case directory = ""
 }
@@ -33,12 +36,12 @@ extension String
         let pathExtension = pathExtentionFor(path: self)
         switch (pathExtension)
         {
-        case .bmp, .jpeg, .jpg, .png, .tif, .tiff:  return .image
-        case .mov, .mp4:                            return .video
-        case .txt, .js, .rtf:                       return .text
-        case .directory:                            return .directory
-        case .pdf:                                  return .pdf
-        default:                                    return .unknown
+        case .bmp, .jpeg, .jpg, .png, .tif, .tiff:      return .image
+        case .mov, .mp4:                                return .video
+        case .txt, .js, .rtf, .doc, .docx, .swift:      return .text
+        case .directory:                                return .directory
+        case .pdf:                                      return .pdf
+        default:                                        return .unknown
         }
     }
     private func pathExtentionFor(path: String) -> PathExtension
@@ -60,6 +63,9 @@ extension String
         case    "mov"   :  return .mov
         case    "mp4"   :  return .mp4
         case    "rtf"   :  return .rtf
+        case    "doc"   :  return .doc
+        case    "docx"  :  return .docx
+        case    "swift" :  return .swift
         default         :  return .uknown
         }
     }

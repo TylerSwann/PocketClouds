@@ -114,6 +114,8 @@ enum SettingState
     case settingup
 }
 
+enum FontStyle {case bold, itallics, normal, underlined}
+
 
 
 

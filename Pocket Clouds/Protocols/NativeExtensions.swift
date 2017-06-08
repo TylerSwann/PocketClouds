@@ -85,20 +85,6 @@ extension NSTextAlignment
         }
     }
 }
-//case left // Visually left aligned
-//
-//
-//case center // Visually centered
-//
-//case right // Visually right aligned
-//
-///* !TARGET_OS_IPHONE */
-//// Visually right aligned
-//// Visually centered
-//
-//case justified // Fully-justified. The last line in a paragraph is natural-aligned.
-//
-//case natural // Indicates the default alignment for script
 
 extension UIViewController
 {
