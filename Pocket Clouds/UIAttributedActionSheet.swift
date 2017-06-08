@@ -81,8 +81,8 @@ open class UIAttributedActionSheet: NSObject,
         self.doneButton = doneButton
         self.toolbar = toolbar
         self.needsSetup = false
-        self.view.autoresizingMask = [.flexibleWidth, .flexibleTopMargin, .flexibleHeight]
-        self.tableview?.autoresizingMask = [.flexibleWidth, .flexibleTopMargin, .flexibleHeight]
+        self.view.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin, .flexibleTopMargin, .flexibleHeight]
+        self.tableview?.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin, .flexibleTopMargin, .flexibleHeight]
         self.toolbar?.autoresizingMask = [.flexibleWidth]
     }
     open func show()
@@ -130,7 +130,6 @@ open class UIAttributedActionSheet: NSObject,
     {
         if let cell = tableView.dequeueReusableCell(withIdentifier: self.reuseIdentifier, for: indexPath) as? UIAttributedActionSheetCell
         {
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
             cell.textLabel?.attributedText = self.delegate?.attributedActionSheet(titleForRowAt: indexPath.item)
             return cell
         }

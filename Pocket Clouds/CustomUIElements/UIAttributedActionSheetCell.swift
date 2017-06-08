@@ -18,6 +18,7 @@ open class UIAttributedActionSheetCell: UITableViewCell
         self.accessoryType = .none
         self.selectionStyle = .none
         self.textLabel?.textAlignment = .center
+        self.textLabel?.adjustsFontSizeToFitWidth = true
         self.backgroundColor = UIColor.clear
     }
     required public init?(coder aDecoder: NSCoder)

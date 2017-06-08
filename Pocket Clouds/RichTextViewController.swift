@@ -11,10 +11,10 @@ import UIKit
 import MessageUI
 
 class RichTextViewController: FileActionMenuView,
-                                UITextViewDelegate,
                                 MFMailComposeViewControllerDelegate,
                                 TextEditorKeyboardDelegate
 {
+    private var initialHashValue = ""
     var textview = UITextView()
     weak var cancelButton: UIBarButtonItem?
     weak var saveButton: UIBarButtonItem?
@@ -26,6 +26,7 @@ class RichTextViewController: FileActionMenuView,
     {
         super.viewDidLoad()
         guard let attibutedText = self.loadRichtext(atUrl: self.incommingFilePath) else {print("Couldn't load file");return}
+        
         self.textview = UITextView(frame: CGRect(origin: CGPoint.zero, size: self.size))
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelClick))
         let saveButton = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveClick))
@@ -54,13 +55,16 @@ class RichTextViewController: FileActionMenuView,
         {
             self.textview.attributedText = attributedText
         }
-        self.textview.delegate = self
         self.editorKeyboardBar?.textDelegate = self
+        
+        if let initialHash = try? String.init(contentsOf: self.incommingFilePath.toURL())
+        {
+            self.initialHashValue = initialHash.hashValue.description
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool)
     {
-        self.textview.delegate = nil
         self.editorKeyboardBar?.textDelegate = nil
     }
     
@@ -116,36 +120,63 @@ class RichTextViewController: FileActionMenuView,
     
     @objc private func saveClick()
     {
-        
+//        guard let attributedString = self.textview.attributedText else {print("couldnt get current attribstring");return}
+//        let filemanager = FileManager.default
+//        if let htmlData = self.attributedTextToHtmlData(attributedString)
+//        {
+//            do
+//            {
+//                try filemanager.removeItem(atPath: self.incommingFilePath)
+//                try htmlData.write(to: self.incommingFilePath.toURL(), options: Data.WritingOptions.completeFileProtection)
+//            }
+//            catch let error {print(error)}
+//        }
     }
     
     
     @objc private func cancelClick()
     {
-        if (needsSaving)
+        self.dismiss(animated: true, completion: nil)
+//        if (self.initialHashValue != self.textview.attributedText.hashValue.description)
+//        {
+//            let filename = self.incommingFilePath.toURL().lastPathComponent
+//            let message = "Do you want to save changes to \(filename)"
+//            let alertController = UIAlertController(title: "Unsaved Changes", message: message, preferredStyle: .alert)
+//            let yesButton = UIAlertAction(title: "Yes", style: .default, handler: {_ in
+//                DispatchQueue.global(qos: .userInitiated).async {
+//                    self.saveClick()
+//                    DispatchQueue.main.async{self.dismiss(animated: true, completion: nil)}
+//                }
+//            })
+//            let noButton = UIAlertAction(title: "No", style: .default, handler: {_ in self.dismiss(animated: true, completion: nil)})
+//            let buttons = [noButton, yesButton]
+//            buttons.forEach({button in alertController.addAction(button)})
+//            self.present(alertController, animated: true, completion: nil)
+//        }
+//        else{print("doesnt need saving")}
+    }
+    
+    private func attributedTextToHtmlData(_ attributedString: NSAttributedString?) -> Data?
+    {
+        let htmloptions = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
+        let range = NSRange.init(location: 0, length: attributedString?.length ?? 0)
+        do
         {
-            let filename = self.incommingFilePath.toURL().lastPathComponent
-            let message = "Do you want to save changes to \(filename)"
-            let alertController = UIAlertController(title: "Unsaved Changes", message: message, preferredStyle: .alert)
-            let yesButton = UIAlertAction(title: "Yes", style: .default, handler: {_ in
-                DispatchQueue.global(qos: .userInitiated).async {
-                    self.saveClick()
-                    DispatchQueue.main.async{self.dismiss(animated: true, completion: nil)}
-                }
-            })
-            let noButton = UIAlertAction(title: "No", style: .default, handler: {_ in
-                self.dismiss(animated: true, completion: nil)
-            })
-            let buttons = [noButton, yesButton]
-            buttons.forEach({button in
-                alertController.addAction(button)
-            })
-            self.present(alertController, animated: true, completion: nil)
+            let htmlData = try attributedString?.data(from: range, documentAttributes: htmloptions)
+            return htmlData
         }
-        else
+        catch let error {print(error)}
+        return nil
+    }
+    private func htmlDataToAttributedString(_ data: Data?) -> NSAttributedString?
+    {
+        let htmloptions = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
+        if let htmldata = data,
+            let attributedString = try? NSAttributedString.init(data: htmldata, options: htmloptions, documentAttributes: nil)
         {
-            self.dismiss(animated: true, completion: nil)
+            return attributedString
         }
+        return nil
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?)
@@ -153,17 +184,28 @@ class RichTextViewController: FileActionMenuView,
         controller.dismiss(animated: true, completion: nil)
     }
     
-    
-    func textViewDidChange(_ textView: UITextView)
-    {
-        self.needsSaving = true
-    }
-    
     func loadRichtext(atUrl url: String) -> NSAttributedString?
     {
         guard let data = try? Data(contentsOf: url.toURL()) else {return nil}
-        let rtfoptions = [NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType]
-        guard let attributedString = try? NSAttributedString(data: data, options: rtfoptions, documentAttributes: nil) else {return nil}
-        return attributedString
+        let rtfoptions = [NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType]
+        let htmloptions = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
+        let plainoptions = [NSDocumentTypeDocumentAttribute : NSPlainTextDocumentType]
+        if let attributedString = try? NSAttributedString(data: data, options: rtfoptions, documentAttributes: nil){return attributedString}
+        if let attributedString = try? NSAttributedString(data: data, options: htmloptions, documentAttributes: nil){return attributedString}
+        if let attributedString = try? NSAttributedString(data: data, options: plainoptions, documentAttributes: nil){return attributedString}
+        if let string = String.init(data: data, encoding: .utf8)
+        {
+            let basicFont = UIFont.systemFont(ofSize: 13, weight: UIFontWeightRegular)
+            let attributedString = NSAttributedString(string: string, attributes: [NSFontAttributeName : basicFont])
+            return attributedString
+        }
+        
+        return nil
     }
 }
+
+
+
+
+
+

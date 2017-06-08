@@ -11,7 +11,7 @@ import UIKit
 import FontAwesome_swift
 import ActionSheetPicker_3_0
 
-class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
+class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate, UITextViewDelegate
 {
     typealias Closure = (() -> Void)
     
@@ -20,6 +20,9 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     private weak var textAlignmentButton: UIBarButtonItem?
     private weak var fontColorButton: UIBarButtonItem?
     private weak var closeButton: UIBarButtonItem?
+    private weak var boldButton: UIButtonSwitch?
+    private weak var italicButton: UIButtonSwitch?
+    
     private var inputTextfield = UITextField()
     private var currentItems: [UIBarButtonItem]?
     private lazy var superViewSize: CGSize = {return CGSize.init(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)}()
@@ -28,6 +31,8 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     private var fontpreviews = [NSAttributedString]()
     private var fonts = [UIFont]()
     private var attributedActionSheet = UIAttributedActionSheet()
+    
+    var icons = [UIImage]()
     
     var viewController: UIViewController
     var textDelegate: TextEditorKeyboardDelegate?
@@ -53,6 +58,11 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
         let fontIcon = UIImage.fontAwesomeIcon(name: .font, textColor: UIColor.calmBlue, size: iconSize)
         let fontSizeIcon = UIImage.fontAwesomeIcon(name: .textHeight, textColor: UIColor.calmBlue, size: iconSize)
         let colorView = UIView(frame: CGRect(origin: CGPoint.zero, size: iconSize))
+        let boldIconOff = UIImage.fontAwesomeIcon(name: .bold, textColor: UIColor.calmBlue, size: iconSize)
+        let italicIconOff = UIImage.fontAwesomeIcon(name: .italic, textColor: UIColor.calmBlue, size: iconSize)
+        let boldIconOn = UIImage.fontAwesomeIcon(name: .bold, textColor: UIColor.modernGreen, size: iconSize)
+        let italicIconOn = UIImage.fontAwesomeIcon(name: .italic, textColor: UIColor.modernGreen, size: iconSize)
+        self.icons = [boldIconOn, boldIconOff]
         colorView.layer.cornerRadius = 5
         colorView.backgroundColor = UIColor.black
         colorView.layer.borderColor = UIColor.white.cgColor
@@ -63,26 +73,32 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
         let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeClick))
         let fontButton = UIBarButtonItem(image: fontIcon, style: .plain, target: self, action: #selector(fontClick))
         let colorButton = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(colorClick))
+        let boldButton = UIButtonSwitch(onImage: boldIconOn, offImage: boldIconOff, toolbar: self, onValueChange: {self.changeTextToBold()})
+        let italicButton = UIButtonSwitch(onImage: italicIconOn, offImage: italicIconOff, toolbar: self, onValueChange: {self.changeTextToItalic()})
+        
         colorButton.customView = colorView
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         
-        self.items = [fontSizeButton, textAlignmentButton, fontButton, colorButton, flexibleSpace, closeButton]
+        self.items = [fontSizeButton, textAlignmentButton, fontButton, colorButton, boldButton.barButtonItem, italicButton.barButtonItem, flexibleSpace, closeButton]
         self.sizeToFit()
         self.textAlignmentButton = textAlignmentButton
         self.fontSizeButton = fontSizeButton
         self.closeButton = closeButton
         self.fontButton = fontButton
         self.fontColorButton = colorButton
+        self.boldButton = boldButton
+        self.italicButton = italicButton
         
         self.attributedActionSheet = UIAttributedActionSheet(presentOn: self.viewController)
         self.attributedActionSheet.delegate = self
+        self.textview.delegate = self
         
         UIFont.familyNames.forEach({familyName in
             UIFont.fontNames(forFamilyName: familyName).forEach({name in
-                if let font = UIFont(name: name, size: 12)
+                if let font = UIFont(name: name, size: 30)
                 {
                     let attributes = [NSFontAttributeName : font]
-                    let attributedString = NSMutableAttributedString(string: "The quick brown fox jumps over the lazy dog", attributes: attributes)
+                    let attributedString = NSMutableAttributedString(string: name, attributes: attributes)
                     attributedString.enumerateAttribute(NSFontAttributeName,
                                                         in: NSRange.init(location: 0,
                                                                          length: attributedString.length),
@@ -104,22 +120,21 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
     @objc private func closeClick(){self.textDelegate?.hideKeyboard()}
     @objc private func fontClick(){self.showFontDialog()}
     @objc private func colorClick(){self.textDelegate?.changeSelectedText(toColor: .cloud)}
-    
     @objc private func changeCenterAlignment(){self.textDelegate?.changeSelectedText(alignmentTo: .center); self.resetBarItems()}
     @objc private func changeLeftAlignment(){self.textDelegate?.changeSelectedText(alignmentTo: .left); self.resetBarItems()}
     @objc private func changeRightAlignment(){self.textDelegate?.changeSelectedText(alignmentTo: .right); self.resetBarItems()}
     @objc private func changeJustifiedAlignment(){self.textDelegate?.changeSelectedText(alignmentTo: .justified); self.resetBarItems()}
+    @objc private func changeTextToBold(){self.textDelegate?.changeFontStyleToBold()}
+    @objc private func changeTextToItalic(){self.textDelegate?.changeFontStyleToItalic()}
+    
+    
     
     
     private func showFontDialog()
     {
-        let selectedRange = self.textview.selectedRange
         self.textview.resignFirstResponder()
         self.attributedActionSheet.show()
-        self.textview.selectedRange = selectedRange
     }
-    
-    
     
     private func showTextAlignmentDialog()
     {
@@ -134,7 +149,7 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
         let right = UIBarButtonItem(image: rightIcon, style: .plain, target: self, action: #selector(changeRightAlignment))
         let justify = UIBarButtonItem(image: justifyIcon, style: .plain, target: self, action: #selector(changeJustifiedAlignment))
         let flexiblespace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        self.setItems([flexiblespace, right, center, left, justify, flexiblespace], animated: true)
+        self.setItems([flexiblespace, left, center, right, justify, flexiblespace], animated: true)
     }
 
     
@@ -167,7 +182,28 @@ class TextEditorKeyboardAccessory: UIToolbar, UIAttributedActionSheetDelegate
         self.currentItems = nil
     }
 
-    
+    func textViewDidChangeSelection(_ textView: UITextView)
+    {
+        let selectedRange = self.textview.selectedRange
+        let attributedString = self.textview.attributedText
+        if (selectedRange.length <= 0)
+        {
+            self.italicButton?.setSwitch(to: false)
+            self.boldButton?.setSwitch(to: false)
+            return
+        }
+        attributedString?.enumerateAttribute(NSFontAttributeName,
+                                            in: selectedRange,
+                                            options: [],
+                                            using: {value, range, stop in
+                                                guard let currentFont = value as? UIFont else {return}
+                                                let currentTraits = currentFont.fontDescriptor.symbolicTraits
+                                                if (currentTraits.contains(.traitBold)){self.boldButton?.setSwitch(to: true)}
+                                                else {self.boldButton?.setSwitch(to: false)}
+                                                if (currentTraits.contains(.traitItalic)){self.italicButton?.setSwitch(to: true)}
+                                                else {self.italicButton?.setSwitch(to: false)}
+        })
+    }
     
     func attributedActionSheet(numberOfRowsIn section: Int) -> Int
     {
