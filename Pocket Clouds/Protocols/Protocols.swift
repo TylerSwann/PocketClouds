@@ -106,6 +106,7 @@ enum MediaType
     case pdf
     case unknown
     case text
+    case archive
 }
 
 enum SettingState

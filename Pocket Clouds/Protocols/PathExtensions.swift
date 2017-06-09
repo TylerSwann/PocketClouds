@@ -27,6 +27,11 @@ enum PathExtension: String
     case docx   =   "docx"
     case swift  =   "swift"
     case uknown =   "uknown"
+    case rar    =   "rar"
+    case zip    =   "zip"
+    case sevenZ =   "7z"
+    case tar    =   "tar"
+    case jar    =   "jar"
     case directory = ""
 }
 extension String
@@ -41,6 +46,7 @@ extension String
         case .txt, .js, .rtf, .doc, .docx, .swift:      return .text
         case .directory:                                return .directory
         case .pdf:                                      return .pdf
+        case .tar, .zip, .jar, .sevenZ, .rar:           return .archive
         default:                                        return .unknown
         }
     }
@@ -66,8 +72,14 @@ extension String
         case    "doc"   :  return .doc
         case    "docx"  :  return .docx
         case    "swift" :  return .swift
+        case    "rar"   :  return .rar
+        case    "zip"   :  return .zip
+        case    "7z"    :  return .sevenZ
+        case    "tar"   :  return .tar
+        case    "jar"   :  return .jar
         default         :  return .uknown
         }
     }
 }
+
 
