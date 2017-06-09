@@ -12,6 +12,7 @@ import AVKit
 import AVFoundation
 import KeychainSwift
 import ActionSheetPicker_3_0
+import SSZipArchive
 /*
  keys: sort, sortflow
  */
@@ -220,7 +221,6 @@ class FileViewController: FileViewer, ErrorNotifiable
         self.present(actionSheetController, animated: true, completion: nil)
     }
     
-    
     @objc private func deleteClick()
     {
         if let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
@@ -245,6 +245,27 @@ class FileViewController: FileViewer, ErrorNotifiable
                 })
             }
         }
+    }
+    
+    /// This is specifically for zip files that are password protected
+    private func showPasswordDialog(_ completion: @escaping ((String?) -> Void))
+    {
+        let message = "This file requires a password to extract its contents"
+        let alertController = UIAlertController(title: "Password Protected", message: message, preferredStyle: .alert)
+        alertController.addTextField(configurationHandler: {textfield in
+            textfield.placeholder = "Password..."
+            textfield.isSecureTextEntry = true
+        })
+        let doneButton = UIAlertAction(title: "Done", style: .default, handler: {_ in
+            if let textfield = alertController.textFields?.first
+            {
+                completion(textfield.text)
+            }
+        })
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: {_ in })
+        alertController.addAction(doneButton)
+        alertController.addAction(cancelButton)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     private func sortFiles(_ selectedMainIndex: Int, _ selectedSubIndex: Int)
@@ -318,6 +339,43 @@ class FileViewController: FileViewer, ErrorNotifiable
                     Directory.currentpath = "\(Directory.currentpath)/\(filename)"
                     let fileViewController = FileViewController()
                     self.navigationController?.pushViewController(fileViewController, animated: true)
+                case .archive:
+                    let pathExtension = filename.toURL().pathExtension.lowercased()
+                    if (pathExtension != "zip")
+                    {
+                        self.createMessageBox(withMessage: "Sorry, only .zip archive files are currently supported", title: "Unsupported", andShowOnViewController: self)
+                        return
+                    }
+                    if (SSZipArchive.isFilePasswordProtected(atPath: path))
+                    {
+                        self.showPasswordDialog({input in
+                            guard let password = input else {print("user input was nil"); return}
+                            var error: NSError?
+                            let success = SSZipArchive.isPasswordValidForArchive(atPath: path, password: password, error: &error)
+                            if let zipError = error
+                            {print("Zip error : \(zipError.localizedDescription)")}
+                            if (!success){self.createMessageBox(withMessage: "Incorrect Password", title: "Incorrect", andShowOnViewController: self)}
+                            else
+                            {
+                                DispatchQueue.global(qos: .userInitiated).async
+                                {
+                                    do
+                                    {
+                                        try SSZipArchive.unzipFile(atPath: path, toDestination: Directory.currentpath, overwrite: false, password: input)
+                                    }
+                                    catch let error{print(error)}
+                                    DispatchQueue.main.async{self.reloadCollectionView(reload: nil, completion: nil)}
+                                }
+                            }
+                        })
+                    }
+                    else
+                    {
+                        let success = SSZipArchive.unzipFile(atPath: path, toDestination: Directory.currentpath)
+                        let errorMessage = "There was an error unzipping the archive, data may be corrupted"
+                        if (!success){createMessageBox(withMessage: errorMessage, title: "Error", andShowOnViewController: self)}
+                        else {self.reloadCollectionView(reload: nil, completion: nil)}
+                    }
                 default:
                     let webViewController = WebViewController()
                     webViewController.incomingFilepath = path
