@@ -43,12 +43,51 @@ extension UploadHandleable
         {
         case .image:
             processUploadedImage(data: data, filename: filename)
+        case .text:
+            self.processTextFile(data: data, filename: filename)
         default:
             print("default at uploadhandleable")
             processUknownFileType(data: data, filename: filename)
         }
 
     }
+    
+    //fix
+    private func processTextFile(data: Data, filename: String)
+    {
+        let htmloptions = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
+        let rtfoptions = [NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType]
+        let plainoptions = [NSDocumentTypeDocumentAttribute : NSPlainTextDocumentType]
+        var attributedFile = NSAttributedString()
+        var path = "\(Directory.toplevel)/Uploads/\(filename)"
+        let pathExtension = path.toURL().pathExtension
+        if (fileExists(atPath: path))
+        {
+            let newFilename = "\(filename.replacingOccurrences(of: ".\(pathExtension)", with: "-Copy")).\(pathExtension)"
+            path = "\(Directory.toplevel)/Uploads/\(newFilename)"
+        }
+        if let attributedString = try? NSAttributedString(data: data, options: rtfoptions, documentAttributes: nil){attributedFile = attributedString}
+        else
+        {
+            if let attributedString = try? NSAttributedString(data: data, options: htmloptions, documentAttributes: nil){attributedFile = attributedString}
+            else
+            {
+                if let attributedString = try? NSAttributedString(data: data, options: plainoptions, documentAttributes: nil){attributedFile = attributedString}
+                else
+                {
+                    print("Couldnt process attributed text file")
+                }
+            }
+        }
+        do
+        {
+            let range = NSRange.init(location: 0, length: attributedFile.length)
+            let htmlData = try attributedFile.data(from: range, documentAttributes: htmloptions)
+            try htmlData.write(to: path.toURL())
+        }
+        catch let error {print(error)}
+    }
+    
     private func processUknownFileType(data: Data, filename: String)
     {
         let path = "\(Directory.toplevel)/Uploads/\(filename)"
