@@ -106,6 +106,8 @@ class FileViewerCell: UICollectionViewCell
     var nameview = UIView()
     var checkmark = UIImageView()
     var thumbnail = UIImageView()
+    var detailLabel = UILabel()
+    var cellcenter = CGPoint.zero
     
     override init(frame: CGRect)
     {
@@ -117,20 +119,29 @@ class FileViewerCell: UICollectionViewCell
     {
         let size = self.frame.size
         let cellframe = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        let cellcenter = CGPoint(x: (size.width / CGFloat(2)), y: (size.height / CGFloat(2)))
+        self.cellcenter = CGPoint(x: (size.width / CGFloat(2)), y: (size.height / CGFloat(2)))
         self.namelabel = UILabel(frame: cellframe)
+        self.namelabel.frame.size.width -= 5
         self.namelabel.textAlignment = .center
         self.namelabel.center = cellcenter
         self.namelabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        self.detailLabel = UILabel(frame: cellframe)
+        self.detailLabel.center = cellcenter
+        self.detailLabel.textAlignment = .center
+        self.detailLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        self.detailLabel.textColor = UIColor.darkGray
+        self.thumbnail = UIImageView(frame: cellframe)
+        self.thumbnail.contentMode = .scaleAspectFit
         self.label = UILabel(frame: cellframe)
         self.label.textAlignment = .center
+        self.label.frame.size.width = (self.thumbnail.frame.size.width / 1.5)
+        self.label.frame.size.height /= 2
         self.label.center = cellcenter
         self.label.center.y += (size.width / CGFloat(4))
         self.label.font = UIFont.systemFont(ofSize: 29, weight: UIFontWeightBlack)
         self.label.textColor = UIColor.init(red: 53/255, green: 53/255, blue: 53/255, alpha: 255/255)
+        
         self.label.adjustsFontSizeToFitWidth = true
-        self.thumbnail = UIImageView(frame: cellframe)
-        self.thumbnail.contentMode = .scaleAspectFit
         self.nameview = UIView(frame: CGRect(x: 0, y: 0, width: size.width, height: (size.height / CGFloat(3.5))))
         self.nameview.center = cellcenter
         self.nameview.backgroundColor = UIColor.white
@@ -144,8 +155,10 @@ class FileViewerCell: UICollectionViewCell
         addSubview(nameview)
         addSubview(label)
         addSubview(namelabel)
+        addSubview(detailLabel)
         addSubview(checkmark)
         
+        self.detailLabel.isHidden = true
         self.namelabel.isHidden = true
         self.label.isHidden = true
         self.nameview.isHidden = true
@@ -155,11 +168,17 @@ class FileViewerCell: UICollectionViewCell
     func refresh()
     {
         let size = self.frame.size
-        let cellcenter = CGPoint(x: (size.width / CGFloat(2)), y: (size.height / CGFloat(2)))
+        self.cellcenter = CGPoint(x: (size.width / CGFloat(2)), y: (size.height / CGFloat(2)))
+        self.thumbnail.frame = self.frame
+        self.thumbnail.center = cellcenter
+        self.label.frame.size.width = (self.thumbnail.frame.size.width / 1.5)
+        self.label.adjustsFontSizeToFitWidth = true
         self.label.center = cellcenter
-        self.label.center.y += (size.width / CGFloat(4))
+        self.label.center.y += (size.width / CGFloat(6.5))
+        
         self.namelabel.center = cellcenter
         self.nameview.center = cellcenter
+        self.detailLabel.center = cellcenter
         
         self.namelabel.isHidden = true
         self.label.isHidden = true

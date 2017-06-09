@@ -361,7 +361,7 @@ class FileViewController: FileViewer, ErrorNotifiable
                                 {
                                     do
                                     {
-                                        try SSZipArchive.unzipFile(atPath: path, toDestination: Directory.currentpath, overwrite: false, password: input)
+                                        try SSZipArchive.unzipFile(atPath: path, toDestination: Directory.currentpath, overwrite: true, password: input)
                                     }
                                     catch let error{print(error)}
                                     DispatchQueue.main.async{self.reloadCollectionView(reload: nil, completion: nil)}
@@ -373,8 +373,14 @@ class FileViewController: FileViewer, ErrorNotifiable
                     {
                         let success = SSZipArchive.unzipFile(atPath: path, toDestination: Directory.currentpath)
                         let errorMessage = "There was an error unzipping the archive, data may be corrupted"
-                        if (!success){createMessageBox(withMessage: errorMessage, title: "Error", andShowOnViewController: self)}
-                        else {self.reloadCollectionView(reload: nil, completion: nil)}
+                        if (!success)
+                        {
+                            createMessageBox(withMessage: errorMessage, title: "Error", andShowOnViewController: self)
+                        }
+                        else
+                        {
+                            self.reloadCollectionView(reload: nil, completion: nil)
+                        }
                     }
                 default:
                     let webViewController = WebViewController()

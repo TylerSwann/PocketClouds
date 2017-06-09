@@ -133,7 +133,11 @@ class FileViewer: UIViewController,
             case .image:
                 let thumbnailpath = path.replacingOccurrences(of: Directory.toplevel, with: Directory.photoThumbnails).replacingOccurrences(of: fileExtension, with: "JPG")
                 if let thumbnail = UIImage(contentsOfFile: thumbnailpath){thumb = thumbnail}
-                else {print("Couldn't get image thumbnail named : \(filename)"); thumb = #imageLiteral(resourceName: "UknownIcon")}
+                else
+                {
+                    if let actualImage = UIImage(contentsOfFile: thumbnailpath){thumb = actualImage}
+                    print("Couldn't get image thumbnail named : \(filename)"); thumb = #imageLiteral(resourceName: "UknownIcon")
+                }
             case .pdf: thumb = #imageLiteral(resourceName: "PDFIcon")
             case .directory: thumb = #imageLiteral(resourceName: "folderoption4.png")
             default: thumb = #imageLiteral(resourceName: "UknownIcon")
@@ -142,7 +146,6 @@ class FileViewer: UIViewController,
         }
         return file
     }
-    
     
     func reloadCollectionView(reload: (() -> Void)?, completion: (() -> Void)?)
     {
@@ -159,8 +162,7 @@ class FileViewer: UIViewController,
             }
         }
     }
-    
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
         return filecount
@@ -185,14 +187,37 @@ class FileViewer: UIViewController,
                 cell.nameview.isHidden = false
                 cell.nameview.applyBlurEffect(usingStyle: .regular, withVibrancy: true)
             case .directory:
-                cell.namelabel.center.y += (cell.frame.size.width / CGFloat(4.5))
+                cell.thumbnail.center.y -= (cell.frame.size.height / 9)
+                cell.namelabel.center.y += (cell.frame.size.width / CGFloat(7))
                 cell.namelabel.isHidden = false
                 cell.namelabel.textColor = UIColor.white
-            case .pdf, .image: break
+                cell.detailLabel.text = "\(contentsOfFolder(atPath: file.path).count) items"
+                cell.detailLabel.center.y += (cell.frame.size.height / 2.8)
+                cell.detailLabel.adjustsFontSizeToFitWidth = true
+                cell.detailLabel.isHidden = false
+            case .pdf:
+                cell.thumbnail.frame.size.width /= 1.2
+                cell.thumbnail.frame.size.height /= 1.2
+                cell.thumbnail.center = cell.cellcenter
+                cell.thumbnail.center.y /= 1.1
+                cell.detailLabel.text = file.filename
+                cell.detailLabel.center.y += (cell.frame.size.height / 2.2)
+                cell.detailLabel.isHidden = false
+            case .image: break
             default:
-                let fileExtention = file.path.toURL().pathExtension
-                cell.label.text = fileExtention
-                cell.label.isHidden = false
+                if (initialLoadingHasOccured)
+                {
+                    let fileExtention = file.path.toURL().pathExtension
+                    cell.thumbnail.frame.size.width /= 1.2
+                    cell.thumbnail.frame.size.height /= 1.2
+                    cell.thumbnail.center = cell.cellcenter
+                    cell.thumbnail.center.y /= 1.1
+                    cell.detailLabel.text = file.filename
+                    cell.detailLabel.center.y += (cell.frame.size.height / 2.2)
+                    cell.label.text = fileExtention
+                    cell.label.isHidden = false
+                    cell.detailLabel.isHidden = false
+                }
             }
             return cell
         }
