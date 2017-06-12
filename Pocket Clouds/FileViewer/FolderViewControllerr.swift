@@ -12,7 +12,7 @@ import UIKit
 class FoldersViewController: FileViewController
 {
     var settingsButton = UIBarButtonItem()
-    
+    deinit{print("folderview deinit")}
     
     override func viewDidLoad()
     {

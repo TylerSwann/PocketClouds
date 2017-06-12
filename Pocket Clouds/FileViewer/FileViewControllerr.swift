@@ -31,6 +31,8 @@ class FileViewController: FileViewer, ErrorNotifiable
     // Navigation bar button
     var editButton = UIBarButtonItem()
     
+    var fileViewController: FileViewController?
+    
     enum State {case normal, editing}
     var currentstate: State = .normal
     
@@ -44,7 +46,7 @@ class FileViewController: FileViewer, ErrorNotifiable
             initialLoadingHasOccured = true
         }
     }
-    
+    deinit{print("File view deinit")}
     
     override func setup()
     {
@@ -318,7 +320,7 @@ class FileViewController: FileViewer, ErrorNotifiable
                 case .text:
                     let rtfpath = path
                     let richtextViewController = RichTextViewController()
-                    richtextViewController.incommingFilePath = rtfpath
+                    richtextViewController.incomingFilepath = rtfpath
                     let navController = UINavigationController(rootViewController: richtextViewController)
                     self.navigationItem.title = ""
                     self.present(navController, animated: true, completion: nil)

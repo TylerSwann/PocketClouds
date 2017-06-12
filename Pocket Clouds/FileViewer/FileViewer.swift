@@ -46,7 +46,6 @@ class FileViewer: UIViewController,
         self.unlockOrientations()
         self.filecount = contentsOfDirectory(atPath: Directory.currentpath, withSortingOption: nil).count
         self.tabBarController?.tabBar.isHidden = true
-        
         if (initialLoadingHasOccured)
         {
             let currentCount = self.files.count
@@ -76,6 +75,7 @@ class FileViewer: UIViewController,
     
     func setup()
     {
+        print("fileviewer setup")
         // Setup CollectionView
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 2, 2)
@@ -102,6 +102,7 @@ class FileViewer: UIViewController,
         self.view.addSubview(toolbar)
         self.toolbar.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         self.pinViewToSuperView(self.collectionView)
+        self.navigationController?.navigationBar.topItem?.title = " "
     }
     
     func fetchFiles()
@@ -205,19 +206,16 @@ class FileViewer: UIViewController,
                 cell.detailLabel.isHidden = false
             case .image: break
             default:
-                if (initialLoadingHasOccured)
-                {
-                    let fileExtention = file.path.toURL().pathExtension
-                    cell.thumbnail.frame.size.width /= 1.2
-                    cell.thumbnail.frame.size.height /= 1.2
-                    cell.thumbnail.center = cell.cellcenter
-                    cell.thumbnail.center.y /= 1.1
-                    cell.detailLabel.text = file.filename
-                    cell.detailLabel.center.y += (cell.frame.size.height / 2.2)
-                    cell.label.text = fileExtention
-                    cell.label.isHidden = false
-                    cell.detailLabel.isHidden = false
-                }
+                let fileExtention = file.path.toURL().pathExtension
+                cell.thumbnail.frame.size.width /= 1.2
+                cell.thumbnail.frame.size.height /= 1.2
+                cell.thumbnail.center = cell.cellcenter
+                cell.thumbnail.center.y /= 1.1
+                cell.detailLabel.text = file.filename
+                cell.detailLabel.center.y += (cell.frame.size.height / 2.2)
+                cell.label.text = fileExtention
+                cell.label.isHidden = false
+                cell.detailLabel.isHidden = false
             }
             return cell
         }
