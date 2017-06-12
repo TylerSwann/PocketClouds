@@ -44,7 +44,6 @@ open class UIProgressRing
     open func show()
     {
         if (self.isHidden == false){self.dismiss(); return}
-        NotificationCenter.default.addObserver(self, selector: #selector(adjustCenterForOrientation), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         if (needsSetup){self.setup()}
         else {self.addSubviews()}
     }
@@ -60,13 +59,12 @@ open class UIProgressRing
     private func setup()
     {
         self.superViewSize = CGSize(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)
-        self.superViewCenter = self.viewController.view.center
-        self.center = CGPoint(x: (self.superViewSize.width / 2.0), y: (self.superViewSize.height / 2.0))
+        self.superViewCenter = self.viewController.absoluteCenter
         if (UIDevice.current.orientation == .portrait){self.center.y -= (self.size.height / 2)}
-        
         self.view = UIView(frame: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-        self.view.center = self.center
+        self.view.center = self.superViewCenter
         
+        self.center = self.view.absoluteCenter
         self.progressRing = UICircularProgressRingView(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
         self.progressRing.font = self.circleFont
         self.progressRing.fontColor = UIColor.calmBlue
@@ -88,14 +86,15 @@ open class UIProgressRing
         self.label.center = self.center
         self.label.center.y += (self.size.height / 2) - (self.label.frame.size.height / 2)
         needsSetup = false
+        self.view.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin]
         self.addSubviews()
     }
     private func addSubviews()
     {
         self.viewController.view.addSubview(self.view)
         self.view.applyBlurEffect(withBlurStyle: .extraLight, andRoundCornersToRadius: 10)
-        self.viewController.view.addSubview(self.progressRing)
-        self.viewController.view.addSubview(self.label)
+        self.view.addSubview(self.progressRing)
+        self.view.addSubview(self.label)
         self.isHidden = false
     }
     private func removeFromSuperView()
@@ -104,36 +103,6 @@ open class UIProgressRing
         self.label.removeFromSuperview()
         self.progressRing.removeFromSuperview()
         self.isHidden = true
-    }
-    @objc private func adjustCenterForOrientation()
-    {
-        if (self.viewController.orientationIsLocked(toOrientation: .portrait) ==  false)
-        {
-            if (UIDevice.current.orientation == .portrait)
-            {
-                self.superViewSize = CGSize(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)
-                self.superViewCenter = self.viewController.view.center
-                self.center = CGPoint(x: (self.superViewSize.width / 2.0), y: (self.superViewSize.height / 2.0))
-                self.center.y -= (self.size.height / 2)
-                self.view.center = self.center
-                self.progressRing.center = self.center
-                self.progressRing.center.y -= (self.progressRing.frame.size.height / 7)
-                self.label.center = self.center
-                self.label.center.y += (self.size.height / 2) - (self.label.frame.size.height / 2)
-            }
-            else if (UIDevice.current.orientation == .landscapeLeft ||
-                     UIDevice.current.orientation == .landscapeRight)
-            {
-                self.superViewSize = CGSize(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)
-                self.superViewCenter = self.viewController.view.center
-                self.center = CGPoint(x: (self.superViewSize.width / 2.0), y: (self.superViewSize.height / 2.0))
-                self.view.center = self.center
-                self.progressRing.center = self.center
-                self.progressRing.center.y -= (self.progressRing.frame.size.height / 7)
-                self.label.center = self.center
-                self.label.center.y += (self.size.height / 2) - (self.label.frame.size.height / 2)
-            }
-        }
     }
 }
 

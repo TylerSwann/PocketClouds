@@ -101,8 +101,8 @@ class FileViewer: UIViewController,
         self.view.addSubview(self.collectionView)
         self.view.addSubview(toolbar)
         self.toolbar.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-        self.pinViewToSuperView(self.collectionView)
         self.navigationController?.navigationBar.topItem?.title = " "
+        self.pinCollectionViewToSuperview(self.collectionView)
     }
     
     func fetchFiles()

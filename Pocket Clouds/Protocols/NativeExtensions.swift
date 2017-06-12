@@ -67,7 +67,15 @@ extension UIView
         vibrancyEffectView.frame = self.bounds
         if (withVibrancy){self.addSubview(vibrancyEffectView)}
         self.addSubview(blurEffectView)
-        
+    }
+    
+    var absoluteSize: CGSize
+    {
+        return CGSize.init(width: (self.frame.size.width), height: (self.frame.size.height))
+    }
+    var absoluteCenter: CGPoint
+    {
+        return CGPoint.init(x: (self.frame.size.width / 2), y: (self.frame.size.height / 2))
     }
 }
 
@@ -111,6 +119,15 @@ extension UIViewController
     func unlockOrientations()
     {
         self.lockOrientations(allowingOnly: .all)
+    }
+    
+    var absoluteSize: CGSize
+    {
+        return CGSize.init(width: (self.view.frame.size.width), height: (self.view.frame.size.height))
+    }
+    var absoluteCenter: CGPoint
+    {
+        return CGPoint.init(x: (self.view.frame.size.width / 2), y: (self.view.frame.size.height / 2))
     }
 }
 
