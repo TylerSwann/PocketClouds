@@ -8,22 +8,22 @@
 
 import Foundation
 import UIKit
+import MessageUI
 
-class FileActionMenuView: UIViewController, UIDocumentInteractionControllerDelegate
+class FileActionMenuView: UIViewController,
+                          MFMailComposeViewControllerDelegate
 {
     weak var toolbar: UIToolbar?
     weak var actionbutton:UIBarButtonItem?
     var center = CGPoint()
     var size = CGSize()
     
-    var incommingFilePath = ""
+    var incomingFilepath = ""
     
     override func viewDidLoad()
     {
-        
         self.setup()
     }
-    
     private func setup()
     {
         self.size = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
@@ -45,14 +45,37 @@ class FileActionMenuView: UIViewController, UIDocumentInteractionControllerDeleg
         self.toolbar?.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
     }
     
-    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController
+    @objc final func actionClick()
     {
-        return self
-    }  
+        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let printButton = UIAlertAction(title: "Print", style: .default, handler: {_ in self.showPrintDialog()})
+        let emailButton = UIAlertAction(title: "Email", style: .default, handler: {_ in self.sendEmail()})
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let buttons = [printButton, emailButton, cancelButton]
+        buttons.forEach({button in
+            actionSheetController.addAction(button)
+        })
+        self.present(actionSheetController, animated: true, completion: nil)
+    }
+    func showPrintDialog(){}
     
-    @objc func actionClick()
+    private func sendEmail()
     {
-        
+        guard let data = try? Data.init(contentsOf: self.incomingFilepath.toURL()) else {print("Couldn't get data for email");return}
+        if (MFMailComposeViewController.canSendMail())
+        {
+            let emailController = MFMailComposeViewController()
+            let filename = self.incomingFilepath.toURL().lastPathComponent
+            emailController.mailComposeDelegate = self
+            emailController.addAttachmentData(data, mimeType: "text/rtf", fileName: filename)
+            self.present(emailController, animated: true, completion: nil)
+        }
+        else {print("Can't send email...")}
+    }
+    
+    @objc func dismissSelf()
+    {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

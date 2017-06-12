@@ -23,6 +23,13 @@
 		2F4D67D71EA5351B00A81573 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F4D67D51EA5351B00A81573 /* LaunchScreen.storyboard */; };
 		2F4D67F31EA53AB400A81573 /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D67F21EA53AB400A81573 /* Cells.swift */; };
 		2F4D68001EA67DE000A81573 /* MediaPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D67FF1EA67DE000A81573 /* MediaPickerViewController.swift */; };
+		2F4F704A1EEF08E000F953B7 /* BrightnessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F70431EEF08E000F953B7 /* BrightnessView.swift */; };
+		2F4F704B1EEF08E000F953B7 /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F70441EEF08E000F953B7 /* ColorPicker.swift */; };
+		2F4F704C1EEF08E000F953B7 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F70451EEF08E000F953B7 /* ColorUtils.swift */; };
+		2F4F704D1EEF08E000F953B7 /* ColorWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F70461EEF08E000F953B7 /* ColorWheel.swift */; };
+		2F4F704E1EEF08E000F953B7 /* SelectedColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F70471EEF08E000F953B7 /* SelectedColorView.swift */; };
+		2F4F704F1EEF08E000F953B7 /* SwiftHSVColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F70481EEF08E000F953B7 /* SwiftHSVColorPicker.swift */; };
+		2F4F70501EEF08E000F953B7 /* UIColorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F70491EEF08E000F953B7 /* UIColorButton.swift */; };
 		2F6E5A1F1EE1CB2100B36CD8 /* FileActionMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6E5A1E1EE1CB2100B36CD8 /* FileActionMenuView.swift */; };
 		2F76FF871EBFAA25004B69AB /* DeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F76FF861EBFAA25004B69AB /* DeviceModel.swift */; };
 		2F799F001EDB09F000FF7E18 /* FileActionMenuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F799EFF1EDB09F000FF7E18 /* FileActionMenuExtension.swift */; };
@@ -81,6 +88,13 @@
 		2F4D67D81EA5351B00A81573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F4D67F21EA53AB400A81573 /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cells.swift; path = ../Cells.swift; sourceTree = "<group>"; };
 		2F4D67FF1EA67DE000A81573 /* MediaPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MediaPickerViewController.swift; path = ../MediaPickerViewController.swift; sourceTree = "<group>"; };
+		2F4F70431EEF08E000F953B7 /* BrightnessView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrightnessView.swift; sourceTree = "<group>"; };
+		2F4F70441EEF08E000F953B7 /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		2F4F70451EEF08E000F953B7 /* ColorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
+		2F4F70461EEF08E000F953B7 /* ColorWheel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorWheel.swift; sourceTree = "<group>"; };
+		2F4F70471EEF08E000F953B7 /* SelectedColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedColorView.swift; sourceTree = "<group>"; };
+		2F4F70481EEF08E000F953B7 /* SwiftHSVColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftHSVColorPicker.swift; sourceTree = "<group>"; };
+		2F4F70491EEF08E000F953B7 /* UIColorButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorButton.swift; sourceTree = "<group>"; };
 		2F6E5A1E1EE1CB2100B36CD8 /* FileActionMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileActionMenuView.swift; sourceTree = "<group>"; };
 		2F76FF861EBFAA25004B69AB /* DeviceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceModel.swift; path = ../../DeviceModel.swift; sourceTree = "<group>"; };
 		2F799EFF1EDB09F000FF7E18 /* FileActionMenuExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileActionMenuExtension.swift; sourceTree = "<group>"; };
@@ -218,6 +232,7 @@
 		2F4D67CB1EA5351B00A81573 /* Pocket Clouds */ = {
 			isa = PBXGroup;
 			children = (
+				2F4F70421EEF08E000F953B7 /* ColorPicker */,
 				2F6E5A1D1EE1CB0900B36CD8 /* ActionMenu */,
 				2FF9E3341ED322930038DD41 /* FileViewer */,
 				2F2A39231EC23B1F00360C19 /* CustomUIElements */,
@@ -235,6 +250,20 @@
 				2F4D67D81EA5351B00A81573 /* Info.plist */,
 			);
 			path = "Pocket Clouds";
+			sourceTree = "<group>";
+		};
+		2F4F70421EEF08E000F953B7 /* ColorPicker */ = {
+			isa = PBXGroup;
+			children = (
+				2F4F70431EEF08E000F953B7 /* BrightnessView.swift */,
+				2F4F70441EEF08E000F953B7 /* ColorPicker.swift */,
+				2F4F70451EEF08E000F953B7 /* ColorUtils.swift */,
+				2F4F70461EEF08E000F953B7 /* ColorWheel.swift */,
+				2F4F70471EEF08E000F953B7 /* SelectedColorView.swift */,
+				2F4F70481EEF08E000F953B7 /* SwiftHSVColorPicker.swift */,
+				2F4F70491EEF08E000F953B7 /* UIColorButton.swift */,
+			);
+			path = ColorPicker;
 			sourceTree = "<group>";
 		};
 		2F6E5A1D1EE1CB0900B36CD8 /* ActionMenu */ = {
@@ -416,16 +445,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F2A39301EC4D0EB00360C19 /* PasscodeView.swift in Sources */,
+				2F4F70501EEF08E000F953B7 /* UIColorButton.swift in Sources */,
 				2F7D15511EAE99CC000490A6 /* UserLibraryRetreivable.swift in Sources */,
 				2FE695701EB4E8FC005A9937 /* WebViewController.swift in Sources */,
 				2F799F0C1EDC915000FF7E18 /* ComputerImportViewController.swift in Sources */,
 				2F7D153B1EAE87AF000490A6 /* AirlaunchViewController.swift in Sources */,
+				2F4F704D1EEF08E000F953B7 /* ColorWheel.swift in Sources */,
 				2F7D154C1EAE99CC000490A6 /* ImportHandeable.swift in Sources */,
 				2F799F001EDB09F000FF7E18 /* FileActionMenuExtension.swift in Sources */,
 				2F7D15531EAE9DB1000490A6 /* NetworkingInfo.swift in Sources */,
 				2F799F061EDB486600FF7E18 /* ImportViewController.swift in Sources */,
 				2F2314A11ED64E2400571E5C /* PathExtensions.swift in Sources */,
 				2F4D67F31EA53AB400A81573 /* Cells.swift in Sources */,
+				2F4F704F1EEF08E000F953B7 /* SwiftHSVColorPicker.swift in Sources */,
+				2F4F704C1EEF08E000F953B7 /* ColorUtils.swift in Sources */,
 				2FF9E33A1ED378000038DD41 /* FolderViewControllerr.swift in Sources */,
 				2FF9E33C1ED382630038DD41 /* InitialNavigationController.swift in Sources */,
 				2F4D68001EA67DE000A81573 /* MediaPickerViewController.swift in Sources */,
@@ -445,11 +478,14 @@
 				2FAAE00E1EE74056007C98BA /* UIAttributedActionSheet.swift in Sources */,
 				2F8E966B1EE3214A000DBEAB /* TextEditorKeyboardAccessory.swift in Sources */,
 				2F2A391E1EC116D700360C19 /* PasscodeSettings.swift in Sources */,
+				2F4F704B1EEF08E000F953B7 /* ColorPicker.swift in Sources */,
 				2FECC0581ECB97C200228091 /* AuthenticationView.swift in Sources */,
 				2FE696021EB7DA79005A9937 /* POSTServers.swift in Sources */,
 				2F4D67CD1EA5351B00A81573 /* AppDelegate.swift in Sources */,
 				2F7D154E1EAE99CC000490A6 /* Protocols.swift in Sources */,
+				2F4F704E1EEF08E000F953B7 /* SelectedColorView.swift in Sources */,
 				2F7D154D1EAE99CC000490A6 /* NativeExtensions.swift in Sources */,
+				2F4F704A1EEF08E000F953B7 /* BrightnessView.swift in Sources */,
 				2F799F041EDB453400FF7E18 /* UIProgressRing.swift in Sources */,
 				2F6E5A1F1EE1CB2100B36CD8 /* FileActionMenuView.swift in Sources */,
 				2FE696001EB7D3F7005A9937 /* DependencyLinks.swift in Sources */,

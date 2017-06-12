@@ -326,8 +326,9 @@ class FileViewController: FileViewer, ErrorNotifiable
                     self.present(navController, animated: true, completion: nil)
                 case .pdf:
                     let webViewController = WebViewController()
+                    let navController = UINavigationController(rootViewController: webViewController)
                     webViewController.incomingFilepath = path
-                    self.navigationController?.pushViewController(webViewController, animated: true)
+                    self.present(navController, animated: true, completion: nil)
                 case .video:
                     let player = AVPlayer(url: path.toURL())
                     let videoViewController = AVPlayerViewController()
@@ -386,8 +387,9 @@ class FileViewController: FileViewer, ErrorNotifiable
                     }
                 default:
                     let webViewController = WebViewController()
+                    let navController = UINavigationController(rootViewController: webViewController)
                     webViewController.incomingFilepath = path
-                    self.navigationController?.pushViewController(webViewController, animated: true)
+                    self.present(navController, animated: true, completion: nil)
                 }
             }
         }
