@@ -14,7 +14,7 @@ class FileActionMenuView: UIViewController,
                           MFMailComposeViewControllerDelegate
 {
     weak var toolbar: UIToolbar?
-    weak var actionbutton:UIBarButtonItem?
+    weak var actionbutton: UIBarButtonItem?
     var center = CGPoint()
     var size = CGSize()
     
@@ -62,12 +62,21 @@ class FileActionMenuView: UIViewController,
     private func sendEmail()
     {
         guard let data = try? Data.init(contentsOf: self.incomingFilepath.toURL()) else {print("Couldn't get data for email");return}
+        let mediatype = self.incomingFilepath.mediatype()
         if (MFMailComposeViewController.canSendMail())
         {
             let emailController = MFMailComposeViewController()
             let filename = self.incomingFilepath.toURL().lastPathComponent
             emailController.mailComposeDelegate = self
-            emailController.addAttachmentData(data, mimeType: "text/rtf", fileName: filename)
+            switch (mediatype)
+            {
+            case .text: emailController.addAttachmentData(data, mimeType: "text/rtf", fileName: filename)
+            case .pdf: emailController.addAttachmentData(data, mimeType: "application/pdf", fileName: filename)
+            case .image: let mimetype = filename.toURL().pathExtension.lowercased() == "jpg" ? "jpg" : "png"
+                emailController.addAttachmentData(data, mimeType: "image/\(mimetype)", fileName: filename)
+            default: break
+            }
+            
             self.present(emailController, animated: true, completion: nil)
         }
         else {print("Can't send email...")}

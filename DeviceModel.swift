@@ -39,9 +39,11 @@ public enum Devices: String
     case Simulator
     case Other
 }
-public extension UIDevice {
+public extension UIDevice
+{
     
-    public var modelName: Devices {
+    public var modelName: Devices
+    {
         var systemInfo = utsname()
         uname(&systemInfo)
         let machineMirror = Mirror(reflecting: systemInfo.machine)
@@ -81,4 +83,64 @@ public extension UIDevice {
         }
     }
     
+    public func screenSize() -> ScreenSize
+    {
+        let currentmodel = self.modelName
+        switch (currentmodel)
+        {
+        case .IPhone4, .IPhone4S: return DeviceScreenSize.FourthModels
+        case .IPhone5, .IPhone5C, .IPhone5S, .IPhoneSE, .IPodTouch5: return DeviceScreenSize.FifthModels
+        case .IPhone6, .IPhone6S, .IPhone7, .IPodTouch6, .Simulator: return DeviceScreenSize.SixthSeventhModels
+        case .IPhone6Plus, .IPhone7Plus, .IPhone6SPlus: return DeviceScreenSize.PlusModels
+        default: return ScreenSize(width: 0, height: 0)
+        }
+    }
+    
 }
+
+public struct ScreenSize: RawRepresentable
+{
+    var width: Int
+    var height: Int
+    
+    public typealias RawValue = (Int, Int)
+    public var rawValue: RawValue {return (self.width, self.height)}
+    
+    public init(width: Int, height: Int)
+    {
+        self.width = width
+        self.height = height
+    }
+    public init()
+    {
+        self.init(width: 0, height: 0)
+    }
+    
+    public init?(rawValue: RawValue)
+    {
+        self.width = rawValue.0
+        self.height = rawValue.1
+    }
+}
+public struct DeviceScreenSize
+{
+    static let PriorToIPhoneFour = ScreenSize(width: 320, height: 480)
+    static let FourthModels = ScreenSize(width: 320, height: 480)
+    static let FifthModels = ScreenSize(width: 320, height: 568)
+    static let SixthSeventhModels = ScreenSize(width: 375, height: 667)
+    static let PlusModels = ScreenSize(width: 414, height: 736)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
