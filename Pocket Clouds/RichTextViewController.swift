@@ -11,21 +11,17 @@ import UIKit
 import MessageUI
 
 class RichTextViewController: FileActionMenuView,
-                                MFMailComposeViewControllerDelegate,
-                                TextEditorKeyboardDelegate
+                              TextEditorKeyboardDelegate
 {
-    private var initialHashValue = ""
     var textview = UITextView()
     weak var cancelButton: UIBarButtonItem?
     weak var saveButton: UIBarButtonItem?
     weak var editorKeyboardBar: TextEditorKeyboardAccessory?
     
-    var needsSaving = false
-    
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        guard let attibutedText = self.loadRichtext(atUrl: self.incommingFilePath) else {print("Couldn't load file");return}
+        guard let attibutedText = self.loadRichtext(atUrl: self.incomingFilepath) else {print("Couldn't load file");return}
         
         self.textview = UITextView(frame: CGRect(origin: CGPoint.zero, size: self.size))
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelClick))
@@ -45,22 +41,20 @@ class RichTextViewController: FileActionMenuView,
         self.textview.allowsEditingTextAttributes = true
         self.textview.isEditable = true
         self.textview.inputAccessoryView = editorKeyboardBar
+        self.textview.alwaysBounceVertical = true
+        self.textview.keyboardAppearance = .dark
         self.view.addSubview(self.textview)
         self.textview.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.addsubviews()
     }
     override func viewWillAppear(_ animated: Bool)
     {
-        if let attributedText = self.loadRichtext(atUrl: self.incommingFilePath)
+        if let attributedText = self.loadRichtext(atUrl: self.incomingFilepath)
         {
             self.textview.attributedText = attributedText
         }
         self.editorKeyboardBar?.textDelegate = self
-        
-        if let initialHash = try? String.init(contentsOf: self.incommingFilePath.toURL())
-        {
-            self.initialHashValue = initialHash.hashValue.description
-        }
+        self.title = self.incomingFilepath.toURL().lastPathComponent
     }
     
     override func viewWillDisappear(_ animated: Bool)
@@ -73,110 +67,102 @@ class RichTextViewController: FileActionMenuView,
         super.addsubviews()
     }
     
-    override func actionClick()
+    override func showPrintDialog()
     {
-        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let printButton = UIAlertAction(title: "Print", style: .default, handler: {_ in self.printClick()})
-        let emailButton = UIAlertAction(title: "Email", style: .default, handler: {_ in self.sentEmail()})
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let buttons = [printButton, emailButton, cancelButton]
-        buttons.forEach({button in
-            actionSheetController.addAction(button)
-        })
-        self.present(actionSheetController, animated: true, completion: nil)
-    }
-    
-    private func printClick()
-    {
-        guard let attributedText = self.loadRichtext(atUrl: self.incommingFilePath) else {return}
-        let printerFormatter = UISimpleTextPrintFormatter(attributedText: attributedText)
-        let printerController = UIPrintInteractionController.shared
-        printerController.printFormatter = printerFormatter
-        printerController.printingItem = attributedText
-        printerController.present(animated: true, completionHandler: {_, completed, error in
-            if (!completed)
-            {
-                if let printerror = error{print(print(printerror.localizedDescription))}
-            }
-        })
-    }
-    
-    
-    private func sentEmail()
-    {
-        guard let data = try? Data.init(contentsOf: self.incommingFilePath.toURL()) else {print("Couldn't get data for email");return}
-        if (MFMailComposeViewController.canSendMail())
+        let range = NSRange.init(location: 0, length: self.textview.attributedText.length)
+        let richtextOptions = [NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType]
+        do
         {
-            let emailController = MFMailComposeViewController()
-            let filename = self.incommingFilePath.toURL().lastPathComponent
-            emailController.mailComposeDelegate = self
-            emailController.addAttachmentData(data, mimeType: "text/rtf", fileName: filename)
-            self.present(emailController, animated: true, completion: nil)
+            let data = try self.textview.attributedText.data(from: range, documentAttributes: richtextOptions)
+            try data.write(to: self.incomingFilepath.toURL())
+            guard let attributedText = self.textview.attributedText else {return}
+            let printerFormatter = UISimpleTextPrintFormatter(attributedText: attributedText)
+            let printerController = UIPrintInteractionController.shared
+            printerController.printFormatter = printerFormatter
+            printerController.printingItem = NSURL.init(string: self.incomingFilepath)
+            printerController.present(animated: true, completionHandler: {_, completed, error in
+                if let printerror = error
+                {
+                    print("Printer error  :  \(printerror.localizedDescription)")
+                }
+            })
         }
-        else {print("Can't send email...")}
+        catch let error{print(error); self.createMessageBox(title: "Error", message: "Couldn't save/n\(error)"); return}
     }
-
-    
     
     @objc private func saveClick()
     {
-//        guard let attributedString = self.textview.attributedText else {print("couldnt get current attribstring");return}
-//        let filemanager = FileManager.default
-//        if let htmlData = self.attributedTextToHtmlData(attributedString)
-//        {
-//            do
-//            {
-//                try filemanager.removeItem(atPath: self.incommingFilePath)
-//                try htmlData.write(to: self.incommingFilePath.toURL(), options: Data.WritingOptions.completeFileProtection)
-//            }
-//            catch let error {print(error)}
-//        }
+        let range = NSRange.init(location: 0, length: self.textview.attributedText.length)
+        let richtextOptions = [NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType]
+        do
+        {
+            let data = try self.textview.attributedText.data(from: range, documentAttributes: richtextOptions)
+            try data.write(to: self.incomingFilepath.toURL())
+        }
+        catch let error{print(error); self.createMessageBox(title: "Error", message: "Couldn't save/n\(error)"); return}
+        let messageBoxSize = CGSize.init(width: (self.view.frame.size.width / 1.7), height: (self.view.frame.size.width / 1.7))
+        var messageView = UIView(frame: CGRect.init(origin: CGPoint.zero, size: messageBoxSize))
+        let messageCenter = CGPoint.init(x: (self.view.frame.size.width / 2), y: (self.view.frame.size.height / 2))
+        messageView.center = messageCenter
+        messageView.layer.cornerRadius = CGFloat(10)
+        messageView.layer.masksToBounds = true
+        messageView.clipsToBounds = true
+        messageView.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
+        let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
+        blurEffectView.frame = messageView.bounds
+        blurEffectView.center = messageCenter
+        blurEffectView.layer.masksToBounds = true
+        blurEffectView.clipsToBounds = true
+        blurEffectView.layer.cornerRadius = CGFloat(10)
+        blurEffectView.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
+        messageView = blurEffectView
+        let messageLabel = UILabel(frame: CGRect.init(origin: CGPoint.zero, size: messageBoxSize))
+        messageLabel.textAlignment = .center
+        messageLabel.text = "Saved"
+        messageLabel.font = UIFont.systemFont(ofSize: 50, weight: UIFontWeightBlack)
+        self.view.addSubview(messageView)
+        messageLabel.center = CGPoint.init(x: (messageView.frame.size.width / 2), y: (messageView.frame.size.height / 2))
+        messageView.alpha = CGFloat(0)
+        messageView.addSubview(messageLabel)
+        UIView.animate(withDuration: 0.1, animations: {
+            messageView.alpha = CGFloat(1.0)
+        }, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+            UIView.animate(withDuration: 0.3, animations: {
+                messageView.alpha = CGFloat(0.0)
+            }, completion: {completed in
+                if (completed){messageView.removeFromSuperview()}})
+        })
     }
     
     
     @objc private func cancelClick()
     {
-        self.dismiss(animated: true, completion: nil)
-//        if (self.initialHashValue != self.textview.attributedText.hashValue.description)
-//        {
-//            let filename = self.incommingFilePath.toURL().lastPathComponent
-//            let message = "Do you want to save changes to \(filename)"
-//            let alertController = UIAlertController(title: "Unsaved Changes", message: message, preferredStyle: .alert)
-//            let yesButton = UIAlertAction(title: "Yes", style: .default, handler: {_ in
-//                DispatchQueue.global(qos: .userInitiated).async {
-//                    self.saveClick()
-//                    DispatchQueue.main.async{self.dismiss(animated: true, completion: nil)}
-//                }
-//            })
-//            let noButton = UIAlertAction(title: "No", style: .default, handler: {_ in self.dismiss(animated: true, completion: nil)})
-//            let buttons = [noButton, yesButton]
-//            buttons.forEach({button in alertController.addAction(button)})
-//            self.present(alertController, animated: true, completion: nil)
-//        }
-//        else{print("doesnt need saving")}
+        self.textview.resignFirstResponder()
+        let alertController = UIAlertController(title: "Save Changes?", message: self.incomingFilepath.toURL().lastPathComponent, preferredStyle: .alert)
+        let noButton = UIAlertAction(title: "No", style: .default, handler: {_ in self.dismiss(animated: true, completion: nil)})
+        let yesButton = UIAlertAction(title: "Yes", style: .default, handler: {_ in
+            let range = NSRange.init(location: 0, length: self.textview.attributedText.length)
+            let richtextOptions = [NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType]
+            do
+            {
+                let data = try self.textview.attributedText.data(from: range, documentAttributes: richtextOptions)
+                try data.write(to: self.incomingFilepath.toURL())
+            }
+            catch let error{print(error); self.createMessageBox(title: "Error", message: "Couldn't save/n\(error)"); return}
+            self.dismiss(animated: true, completion: nil)
+        })
+        alertController.addAction(noButton)
+        alertController.addAction(yesButton)
+        self.present(alertController, animated: true, completion: nil)
     }
     
-    private func attributedTextToHtmlData(_ attributedString: NSAttributedString?) -> Data?
+    func createMessageBox(title: String, message: String)
     {
-        let htmloptions = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
-        let range = NSRange.init(location: 0, length: attributedString?.length ?? 0)
-        do
-        {
-            let htmlData = try attributedString?.data(from: range, documentAttributes: htmloptions)
-            return htmlData
-        }
-        catch let error {print(error)}
-        return nil
-    }
-    private func htmlDataToAttributedString(_ data: Data?) -> NSAttributedString?
-    {
-        let htmloptions = [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType]
-        if let htmldata = data,
-            let attributedString = try? NSAttributedString.init(data: htmldata, options: htmloptions, documentAttributes: nil)
-        {
-            return attributedString
-        }
-        return nil
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(okButton)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?)

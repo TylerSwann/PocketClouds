@@ -9,9 +9,12 @@
 import Foundation
 import UIKit
 
+import Foundation
+import UIKit
+
 open class UIAttributedActionSheet: NSObject,
-                                UITableViewDelegate,
-                                UITableViewDataSource
+    UITableViewDelegate,
+    UITableViewDataSource
 {
     private var reuseIdentifier = "attributedCell"
     private lazy var superViewSize: CGSize = {return CGSize.init(width: self.viewController.view.frame.size.width, height: (self.viewController.view.frame.size.height))}()
@@ -41,7 +44,7 @@ open class UIAttributedActionSheet: NSObject,
     }
     private func setup()
     {
-        let tableview = UITableView(frame: CGRect.init(x: 0, y: 0, width: self.superViewSize.width, height: (self.superViewSize.height / 2.3)), style: .plain)
+        let tableview = UITableView(frame: CGRect.init(x: 0, y: 0, width: self.superViewSize.width, height: (self.superViewSize.height / 2)), style: .plain)
         
         tableview.register(UIAttributedActionSheetCell.self, forCellReuseIdentifier: self.reuseIdentifier)
         tableview.delegate = self
@@ -53,7 +56,7 @@ open class UIAttributedActionSheet: NSObject,
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         toolbar.items = [flexibleSpace, doneButton]
         
-        self.view = UIView(frame: CGRect(x: 0, y: 0, width: self.superViewSize.width, height: ((self.superViewSize.height / 2.3) + toolbar.frame.size.height)))
+        self.view = UIView(frame: CGRect(x: 0, y: 0, width: self.superViewSize.width, height: ((self.superViewSize.height / 2) + toolbar.frame.size.height)))
         self.center = CGPoint(x: (self.view.frame.size.width / 2), y: (self.view.frame.size.height / 2))
         tableview.isHidden = true
         toolbar.isHidden = true
