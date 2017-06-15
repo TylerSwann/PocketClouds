@@ -56,6 +56,7 @@ class AirlaunchViewController: UIViewController,
     {
         self.unlockOrientations()
         resetView()
+        self.resetZipCache()
     }
     
     // This displays info on how to use airlaunch
@@ -145,6 +146,11 @@ class AirlaunchViewController: UIViewController,
         nsqueue.write(to: Directory.queue.toURL(), atomically: true)
         clearQueueOutlet.title = "Clear queue(0)"
         queueCountLabel.text = "0"
+        self.resetZipCache()
+    }
+    
+    private func resetZipCache()
+    {
         if (contentsOfFolder(atPath: Directory.zipCache).count > 0)
         {
             deleteFile(atPath: Directory.zipCache)

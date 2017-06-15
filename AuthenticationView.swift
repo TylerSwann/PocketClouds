@@ -42,7 +42,8 @@ class AuthenticationView: Adaptable
     {
         self.setup()
         self.viewController.view.addSubview(self.view)
-        self.pinViewToSuperview(self.view)
+        self.view.center = self.center
+        self.snapViewToSuperView(self.view)
         self.isHidden = false
         self.view.setViewHidden(hidden: false, animated: false)
     }

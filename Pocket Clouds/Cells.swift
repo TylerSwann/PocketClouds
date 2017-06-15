@@ -46,10 +46,13 @@ class ImportCell: UICollectionViewCell
     
     func refresh()
     {
-        self.size = self.frame.size
-        self.cellcenter = CGPoint(x: (size.width / CGFloat(2)), y: (size.height / CGFloat(2)))
+        self.size = CGSize(width: self.contentView.frame.size.width, height: self.contentView.frame.size.height)
+        self.cellcenter = CGPoint(x: (size.width / 2), y: (size.height / 2))
         self.namelabel.center = cellcenter
         self.nameview.center = cellcenter
+        self.namelabel.text = ""
+        self.thumbnail.frame.size = self.size
+        self.thumbnail.center = self.cellcenter
         
         self.namelabel.isHidden = true
         self.nameview.isHidden = true
@@ -58,15 +61,13 @@ class ImportCell: UICollectionViewCell
     
     private func setup()
     {
-        self.size = self.frame.size
+        self.size = CGSize(width: self.contentView.frame.size.width, height: self.contentView.frame.size.height)
         self.cellcenter = CGPoint(x: (self.size.width / 2), y: (self.size.height / 2))
         let cellframe = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
-        self.thumbnail = UIImageView(frame: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        self.thumbnail = UIImageView(frame: CGRect.init(x: 0, y: 0, width: self.contentView.frame.size.width, height: self.contentView.frame.size.height))
+        self.thumbnail.center = self.cellcenter
         self.thumbnail.contentMode = .scaleAspectFill
-        self.thumbnail.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin,
-                                           .flexibleTopMargin, .flexibleLeftMargin, .flexibleRightMargin]
         self.thumbnail.clipsToBounds = true
-        
         
         self.checkmark = UIImageView(frame: CGRect(x: 0, y: 0, width: (size.width / CGFloat(4)), height: (size.height / CGFloat(4))))
         self.checkmark.center = cellcenter
@@ -91,6 +92,22 @@ class ImportCell: UICollectionViewCell
         self.namelabel.isHidden = true
         self.nameview.isHidden = true
         self.checkmark.isHidden = true
+    }
+    
+    func setCellToSelected()
+    {
+        self.checkmark.isHidden = false
+        self.subviews.forEach({subview in
+            if (subview != self.checkmark){subview.alpha = CGFloat(0.1)}
+        })
+    }
+    
+    func setCellDeselected()
+    {
+        self.checkmark.isHidden = true
+        self.subviews.forEach({subview in
+            if (subview != self.checkmark){subview.alpha = CGFloat(1.0)}
+        })
     }
     
     required init?(coder aDecoder: NSCoder)
@@ -236,6 +253,7 @@ class ComputerImportCell: UITableViewCell
         fatalError("init(coder:) has not been implemented")
     }
 }
+
 
 
 

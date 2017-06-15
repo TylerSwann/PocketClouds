@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 fileprivate struct ResizingMasks
 {
@@ -72,10 +73,23 @@ extension Adaptable
     }
     //iphone5-(320.0, 568.0)
     //iphone6-(375, 667)
-//    func pinViewToSuperView(_ view: UIView)
-//    {
-//        view.snp.makeConstraints({make in
-//            make.edges.equalToSuperview()
-//        })
-//    }
+    func snapViewToSuperView(_ view: UIView)
+    {
+        view.snp.makeConstraints({make in
+            make.edges.equalToSuperview()
+        })
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
