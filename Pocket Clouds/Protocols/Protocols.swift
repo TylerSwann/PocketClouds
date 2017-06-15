@@ -66,6 +66,21 @@ struct Directory
     static var currentpath = "\(Directory.toplevel)"
 }
 
+public func currentDateAndTime() -> String
+{
+    let date = Date()
+    let calender = Calendar.current
+    let year = calender.component(.year, from: date)
+    let month = calender.component(.month, from: date)
+    let day = calender.component(.day, from: date)
+    let hour = calender.component(.hour, from: date)
+    let minute = calender.component(.minute, from: date)
+    let second = calender.component(.second, from: date)
+    let nanosecond = calender.component(.nanosecond, from: date)
+    let currentDateAndTime = "\(month)/\(day)/\(year)  \(hour):\(minute):\(second):\(nanosecond)"
+    return currentDateAndTime
+}
+
 struct UserSettings
 {
     var touchid: Bool

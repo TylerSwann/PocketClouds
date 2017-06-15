@@ -98,7 +98,7 @@ class ImportCell: UICollectionViewCell
     {
         self.checkmark.isHidden = false
         self.subviews.forEach({subview in
-            if (subview != self.checkmark){subview.alpha = CGFloat(0.1)}
+            if (subview != self.checkmark){subview.alpha = CGFloat(0.5)}
         })
     }
     

@@ -21,6 +21,9 @@ open class UIProgressRing
     private lazy var superViewCenter = {return CGPoint()}()
     private lazy var needsSetup: Bool = {return true}()
     
+    private var percentageComplete = CGFloat(0)
+    private var onePercentOfMaxValue = CGFloat(0)
+    
     open var size = CGSize(width: 200, height: 230)
     open var font = UIFont.systemFont(ofSize: 20, weight: UIFontWeightRegular)
     open var circleFont = UIFont.systemFont(ofSize: 30, weight: UIFontWeightBold)
@@ -52,10 +55,22 @@ open class UIProgressRing
         if (self.isHidden){self.show(); return}
         self.removeFromSuperView()
     }
+    
+    /// Requires maxValue property be set to something besides the default of 100.
+    /// Call this method inside a loop for every iteration and everything with be automatically
+    /// calculated to display the correct percentage of completion
+    open func iterationWasCompleted()
+    {
+        self.percentageComplete += self.onePercentOfMaxValue
+        self.setProgess(value: percentageComplete, animationDuration: 0.2)
+    }
+    
     open func setProgess(value: CGFloat, animationDuration: TimeInterval)
     {
         self.progressRing.setProgress(value: value, animationDuration: animationDuration)
     }
+    
+    
     private func setup()
     {
         self.superViewSize = CGSize(width: self.viewController.view.frame.size.width, height: self.viewController.view.frame.size.height)
@@ -88,6 +103,7 @@ open class UIProgressRing
         needsSetup = false
         self.view.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin]
         self.addSubviews()
+        self.onePercentOfMaxValue = CGFloat(100) / self.maxValue
     }
     private func addSubviews()
     {
