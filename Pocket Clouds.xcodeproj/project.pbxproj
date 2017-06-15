@@ -38,7 +38,6 @@
 		2F76FF871EBFAA25004B69AB /* DeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F76FF861EBFAA25004B69AB /* DeviceModel.swift */; };
 		2F799F001EDB09F000FF7E18 /* FileActionMenuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F799EFF1EDB09F000FF7E18 /* FileActionMenuExtension.swift */; };
 		2F799F041EDB453400FF7E18 /* UIProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F799F031EDB453400FF7E18 /* UIProgressRing.swift */; };
-		2F799F061EDB486600FF7E18 /* ImportViewControllerr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F799F051EDB486600FF7E18 /* ImportViewControllerr.swift */; };
 		2F799F0C1EDC915000FF7E18 /* ComputerImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F799F0B1EDC915000FF7E18 /* ComputerImportViewController.swift */; };
 		2F7D153B1EAE87AF000490A6 /* AirlaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D153A1EAE87AF000490A6 /* AirlaunchViewController.swift */; };
 		2F7D15491EAE99CC000490A6 /* ErrorNotifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D153E1EAE99CC000490A6 /* ErrorNotifiable.swift */; };
@@ -107,7 +106,6 @@
 		2F76FF861EBFAA25004B69AB /* DeviceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceModel.swift; path = ../../DeviceModel.swift; sourceTree = "<group>"; };
 		2F799EFF1EDB09F000FF7E18 /* FileActionMenuExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileActionMenuExtension.swift; sourceTree = "<group>"; };
 		2F799F031EDB453400FF7E18 /* UIProgressRing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIProgressRing.swift; sourceTree = "<group>"; };
-		2F799F051EDB486600FF7E18 /* ImportViewControllerr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportViewControllerr.swift; sourceTree = "<group>"; };
 		2F799F0B1EDC915000FF7E18 /* ComputerImportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputerImportViewController.swift; sourceTree = "<group>"; };
 		2F7D153A1EAE87AF000490A6 /* AirlaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AirlaunchViewController.swift; path = "Pocket Clouds/AirlaunchViewController.swift"; sourceTree = SOURCE_ROOT; };
 		2F7D153E1EAE99CC000490A6 /* ErrorNotifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorNotifiable.swift; sourceTree = "<group>"; };
@@ -213,7 +211,6 @@
 			children = (
 				2F4D67F21EA53AB400A81573 /* Cells.swift */,
 				2F4D67FF1EA67DE000A81573 /* MediaPickerViewController.swift */,
-				2F799F051EDB486600FF7E18 /* ImportViewControllerr.swift */,
 				2F799F0B1EDC915000FF7E18 /* ComputerImportViewController.swift */,
 				2F4F70531EF2FDB300F953B7 /* CollectionViewController.swift */,
 				2F4F70551EF2FF0B00F953B7 /* ImportViewController.swift */,
@@ -467,7 +464,6 @@
 				2F7D154C1EAE99CC000490A6 /* ImportHandeable.swift in Sources */,
 				2F799F001EDB09F000FF7E18 /* FileActionMenuExtension.swift in Sources */,
 				2F7D15531EAE9DB1000490A6 /* NetworkingInfo.swift in Sources */,
-				2F799F061EDB486600FF7E18 /* ImportViewControllerr.swift in Sources */,
 				2F2314A11ED64E2400571E5C /* PathExtensions.swift in Sources */,
 				2F4D67F31EA53AB400A81573 /* Cells.swift in Sources */,
 				2F4F704F1EEF08E000F953B7 /* SwiftHSVColorPicker.swift in Sources */,

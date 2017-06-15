@@ -193,14 +193,17 @@ class FileViewController: FileViewer, ErrorNotifiable
     {
         let actionSheetController = UIAlertController(title: "Import", message: "Where would you like to import from?", preferredStyle: .actionSheet)
         let photoLibraryButton = UIAlertAction(title: "Photo Library", style: .default, handler: {action in
-            if let pickerNavController = self.mainStoryboard.instantiateViewController(withIdentifier: "pickerNavController") as? UINavigationController
-            {
-                if let pickerView = pickerNavController.viewControllers.first as? MediaPickerViewController
-                {
-                    pickerView.selectingMediaType = .image
-                    self.present(pickerNavController, animated: true, completion: nil)
-                }
-            }
+            let importController = ImportViewController()
+            let navController = UINavigationController(rootViewController: importController)
+            self.present(navController, animated: true, completion: nil)
+//            if let pickerNavController = self.mainStoryboard.instantiateViewController(withIdentifier: "pickerNavController") as? UINavigationController
+//            {
+//                if let pickerView = pickerNavController.viewControllers.first as? MediaPickerViewController
+//                {
+//                    pickerView.selectingMediaType = .image
+//                    self.present(pickerNavController, animated: true, completion: nil)
+//                }
+//            }
         })
         let videoLibraryButton = UIAlertAction(title: "Video Library", style: .default, handler: {action in
             if let pickerNavController = self.mainStoryboard.instantiateViewController(withIdentifier: "pickerNavController") as? UINavigationController

@@ -13,6 +13,106 @@ import AVKit
 
 extension ImportHandeable
 {
+    func processAssetsForImport(assets: [PHAsset], perInterationCompletion: (() -> Void)?, completion: (() -> Void)?)
+    {
+        guard assets.count > 0 else {return}
+        assets.forEach({asset in
+            let mediatype = asset.mediaType
+            switch(mediatype)
+            {
+            case .image: self.writeImageAssetToFile(asset); perInterationCompletion?()
+            case .video: self.writeVideoAssetToFile(asset, completion: perInterationCompletion)
+            default: break
+            }
+        })
+        print("completed processAssetsForImport task + \(currentDateAndTime())")
+        completion?()
+    }
+    
+    func writeImageAssetToFile(_ asset: PHAsset)
+    {
+        guard asset.mediaType == .image else {print("This asset is not an image!"); return}
+        let options = PHImageRequestOptions()
+        let path = Directory.currentpath
+        options.isSynchronous = true
+        options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = false
+        // Try to get original filename
+        var filename = asset.value(forKey: "filename")  as? String ?? autoGenerateFileName(mediaType: .image)
+        /// Get thumbnail size
+        let thumbnail = retreiveThumbnailFor(asset: asset, size: ImageSize.smallThumbnail)
+        // Crop thumbnail
+        let croppedThumbnail = cropThumbnail(forImage: thumbnail)
+        // Get path to thumbnails folder
+        let pathExtention = filename.toURL().pathExtension
+        var pathToFile = "\(path)/\(filename)"
+        if (fileExists(atPath: pathToFile))
+        {
+            filename = "\(filename.replacingOccurrences(of: ".\(pathExtention)", with: "-Copy")).\(pathExtention)"
+            pathToFile = "\(path)/\(filename)"
+        }
+        let thumbPath = pathToFile.replacingOccurrences(of: Directory.toplevel, with: Directory.photoThumbnails).replacingOccurrences(of: pathExtention, with: "JPG")
+        
+        // Get thumbnail data and write to file
+        // Get full resolution image and write tot file
+        if let thumbData = UIImageJPEGRepresentation(croppedThumbnail, 0),
+            let assetData = retreiveData(forAsset: asset, options: options)
+        {
+            do
+            {
+                try assetData.write(to: pathToFile.toURL(), options: Data.WritingOptions.completeFileProtection)
+                try thumbData.write(to: thumbPath.toURL(), options: Data.WritingOptions.completeFileProtection)
+            }
+            catch let error{print(error)}
+        }
+    }
+    
+    func writeVideoAssetToFile(_ asset: PHAsset, completion: (() -> Void)?)
+    {
+        guard asset.mediaType == .video else {print("This is not a video asset"); return}
+        let imageManager = PHImageManager()
+        let options = PHVideoRequestOptions()
+        let path = Directory.currentpath
+        var hasFinishedExportSession = false
+        options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = false
+        let exportPreset = AVAssetExportPresetHighestQuality
+        // Try to get filename
+        var filename = asset.value(forKey: "filename")  as? String ?? autoGenerateFileName(mediaType: .video)
+        var outputPath = "\(path)/\(filename)"
+        let pathExtension = filename.toURL().pathExtension
+        if (fileExists(atPath: outputPath))
+        {
+            filename = "\(filename.replacingOccurrences(of: ".\(pathExtension)", with: "-Copy")).\(pathExtension)"
+            outputPath = "\(path)/\(filename)"
+        }
+        completion?()
+        imageManager.requestExportSession(forVideo: asset,
+                                          options: options,
+                                          exportPreset: exportPreset,
+                                          resultHandler: {exportSession, _ in
+                                            if (exportSession == nil){return}
+                                            guard exportSession != nil else {print("Video export failed"); return}
+                                            exportSession?.outputURL = outputPath.toURL()
+                                            exportSession?.outputFileType = AVFileTypeMPEG4
+                                            exportSession?.exportAsynchronously {
+                                                // Get thumbnail for video
+                                                let videoThumb = self.retreiveThumbnailFor(asset: asset, size: ImageSize.smallThumbnail)
+                                                // replace the path extention with jpg
+                                                let thumbname = filename.replacingOccurrences(of: pathExtension, with: "JPG")
+                                                let videoThumbnailPath = "\(path)/\(thumbname)".replacingOccurrences(of: Directory.toplevel,
+                                                                                                                     with: Directory.videoThumbnails)
+                                                let croppedThumbnail = self.cropThumbnail(forImage: videoThumb)
+                                                let thumbData = UIImageJPEGRepresentation(croppedThumbnail, 0)
+                                                // Write thumbnail to file
+                                                do {try thumbData?.write(to: videoThumbnailPath.toURL())}
+                                                catch let error {print(error)}
+                                                hasFinishedExportSession = true
+                                            }
+        })
+        while(hasFinishedExportSession == false){}
+    }
+    
     func processImportedMediaFor(_ assets: [PHAsset], andSaveToPath path: String, perIterationCompletion: (() -> Void)?, completion: (() -> Void)?)
     {
         if (assets.count > 0)

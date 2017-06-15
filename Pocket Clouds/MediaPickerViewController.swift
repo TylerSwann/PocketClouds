@@ -96,6 +96,7 @@ class MediaPickerViewController: UIViewController,
     }
     
     
+    
     private func importSelectedMedia(completion: (() -> Void)?)
     {
         if let selectedIndexes = self.mediaCollectionView.indexPathsForSelectedItems
