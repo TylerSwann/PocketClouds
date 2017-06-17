@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
         // Override point for customization after application launch.
-        updateFolderNames()
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthentication),
                                                name: NSNotification.Name.UIApplicationWillEnterForeground,
                                                object: nil)
@@ -73,22 +72,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     @objc private func showAuthentication()
     {
         self.authenticationView.authenticate()
-    }
-    
-    private func updateFolderNames()
-    {
-        let filemanager = FileManager.default
-        
-        if (filemanager.fileExists(atPath: Directory.oldtoplevel) &&
-        filemanager.fileExists(atPath: Directory.oldsupport))
-        {
-            do
-            {
-                try filemanager.moveItem(atPath: Directory.oldtoplevel, toPath: Directory.toplevel)
-                try filemanager.moveItem(atPath: Directory.oldsupport, toPath: Directory.support)
-            }
-            catch let error{print(error)}
-        }
     }
 }
 
