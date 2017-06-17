@@ -48,7 +48,7 @@ public var uploadedFiles = 0
 public var downloads = 0
 
 var applicationHasStarted = false
-
+public var firstResponderNeedsReload = true
 
 struct Directory
 {
@@ -61,6 +61,7 @@ struct Directory
     static let zipCache = "\(Directory.support)/ZipCache"
     static let temp = "\(Directory.support)/Temp"
     static let queue = "\(Directory.temp)/queue.plist"
+    static let imports = "\(Directory.toplevel)/Import"
     static var currentpath = "\(Directory.toplevel)"
     static var processingPath = "\(Directory.toplevel)"
 }

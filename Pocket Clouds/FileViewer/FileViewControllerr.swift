@@ -74,6 +74,9 @@ class FileViewController: FileViewer, ErrorNotifiable
                                                             doneBlock: {picker, indexes, values in self.doneSorting(picker, indexes, values)},
                                                             cancel: {ActionMultipleStringCancelBlock in return},
                                                             origin: self.sortingButton)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkIfReceiverNeedsReload),
+                                               name: NSNotification.Name.UIApplicationWillEnterForeground,
+                                               object: nil)
     }
     
     func changeCurrentState(to state: State)
@@ -96,6 +99,18 @@ class FileViewController: FileViewer, ErrorNotifiable
             self.deSelectAll()
         }
     }
+    
+    @objc private func checkIfReceiverNeedsReload()
+    {
+        if (firstResponderNeedsReload)
+        {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                self.reloadCollectionView(reload: nil, completion: nil)
+                firstResponderNeedsReload = false
+            })
+        }
+    }
+    
     internal func deSelectAll()
     {
         for i in 0..<self.collectionView.numberOfSections
@@ -189,39 +204,25 @@ class FileViewController: FileViewer, ErrorNotifiable
             self.reloadCollectionView(reload: nil, completion: nil)
             )})
     }
+    
     @objc private func importMediaClick()
     {
         let actionSheetController = UIAlertController(title: "Import", message: "Where would you like to import from?", preferredStyle: .actionSheet)
-        let photoLibraryButton = UIAlertAction(title: "Photo Library", style: .default, handler: {action in
+        
+        let libraryButton = UIAlertAction(title: "Library", style: .default, handler: {action in
             let importController = ImportViewController()
             let navController = UINavigationController(rootViewController: importController)
             self.present(navController, animated: true, completion: nil)
-//            if let pickerNavController = self.mainStoryboard.instantiateViewController(withIdentifier: "pickerNavController") as? UINavigationController
-//            {
-//                if let pickerView = pickerNavController.viewControllers.first as? MediaPickerViewController
-//                {
-//                    pickerView.selectingMediaType = .image
-//                    self.present(pickerNavController, animated: true, completion: nil)
-//                }
-//            }
         })
-        let videoLibraryButton = UIAlertAction(title: "Video Library", style: .default, handler: {action in
-            if let pickerNavController = self.mainStoryboard.instantiateViewController(withIdentifier: "pickerNavController") as? UINavigationController
-            {
-                if let pickerView = pickerNavController.viewControllers.first as? MediaPickerViewController
-                {
-                    pickerView.selectingMediaType = .video
-                    self.present(pickerNavController, animated: true, completion: nil)
-                }
-            }
-        })
+        
         let importComputerButton = UIAlertAction(title: "Computer", style: .default, handler: {action in
             let computerImportViewController = ComputerImportViewController()
             let navController = UINavigationController(rootViewController: computerImportViewController)
             self.present(navController, animated: true, completion: nil)
         })
+        
         let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let buttons = [photoLibraryButton, videoLibraryButton, importComputerButton, cancelButton]
+        let buttons = [libraryButton, importComputerButton, cancelButton]
         buttons.forEach({button in actionSheetController.addAction(button)})
         self.present(actionSheetController, animated: true, completion: nil)
     }

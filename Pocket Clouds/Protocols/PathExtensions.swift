@@ -8,6 +8,31 @@
 
 import Foundation
 
+
+let supportedFileTypes = [  "jpg",
+                            "png",
+                            "tiff",
+                            "jpeg",
+                            "bmp",
+                            "tif",
+                            "gif",
+                            "pdf",
+                            "txt",
+                            "js",
+                            "mov",
+                            "mp4",
+                            "rtf",
+                            "doc",
+                            "docx",
+                            "swift",
+                            "uknown",
+                            "rar",
+                            "zip",
+                            "7z",
+                            "tar",
+                            "jar"
+]
+
 enum PathExtension: String
 {
     case jpg    =   "jpg"
@@ -81,5 +106,29 @@ extension String
         }
     }
 }
-
+/*
+ 
+        "jpg",
+        "png",
+        "tiff",
+        "jpeg",
+        "bmp",
+        "tif",
+        "gif",
+        "pdf",
+        "txt",
+        "js",
+        "mov",
+        "mp4",
+        "rtf",
+        "doc",
+        "docx",
+        "swift",
+        "uknown",
+        "rar",
+        "zip",
+        "7z",
+        "tar",
+        "jar"
+ */
 

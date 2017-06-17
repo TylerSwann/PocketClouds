@@ -48,6 +48,7 @@
 		2F7D15511EAE99CC000490A6 /* UserLibraryRetreivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D15461EAE99CC000490A6 /* UserLibraryRetreivable.swift */; };
 		2F7D15531EAE9DB1000490A6 /* NetworkingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D15521EAE9DB1000490A6 /* NetworkingInfo.swift */; };
 		2F89FE871EF45ACB00206A5D /* UIInfiniteProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F89FE861EF45ACB00206A5D /* UIInfiniteProgressRing.swift */; };
+		2F89FE891EF5BE0500206A5D /* ExternalDataProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F89FE881EF5BE0500206A5D /* ExternalDataProcessor.swift */; };
 		2F8E966B1EE3214A000DBEAB /* TextEditorKeyboardAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8E966A1EE3214A000DBEAB /* TextEditorKeyboardAccessory.swift */; };
 		2FAAE00E1EE74056007C98BA /* UIAttributedActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAE00D1EE74056007C98BA /* UIAttributedActionSheet.swift */; };
 		2FAAE0101EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAE00F1EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift */; };
@@ -117,6 +118,7 @@
 		2F7D15461EAE99CC000490A6 /* UserLibraryRetreivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLibraryRetreivable.swift; sourceTree = "<group>"; };
 		2F7D15521EAE9DB1000490A6 /* NetworkingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkingInfo.swift; path = ../NetworkingInfo.swift; sourceTree = "<group>"; };
 		2F89FE861EF45ACB00206A5D /* UIInfiniteProgressRing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIInfiniteProgressRing.swift; sourceTree = "<group>"; };
+		2F89FE881EF5BE0500206A5D /* ExternalDataProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalDataProcessor.swift; sourceTree = "<group>"; };
 		2F8E966A1EE3214A000DBEAB /* TextEditorKeyboardAccessory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEditorKeyboardAccessory.swift; sourceTree = "<group>"; };
 		2FAAE00D1EE74056007C98BA /* UIAttributedActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAttributedActionSheet.swift; path = ../UIAttributedActionSheet.swift; sourceTree = "<group>"; };
 		2FAAE00F1EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAttributedActionSheetDelegate.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				2FF151F41ECF654F00E596DA /* ImageViewController.swift */,
 				2F2314A41ED750FD00571E5C /* SortingOptions.swift */,
 				2F4F70511EEF1DEE00F953B7 /* Icons.swift */,
+				2F89FE881EF5BE0500206A5D /* ExternalDataProcessor.swift */,
 			);
 			path = Various;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 				2F2A391C1EC114FF00360C19 /* SettingsHome.swift in Sources */,
 				2F1050DD1EE32EC100274FD2 /* TextEditorKeyboardDelegate.swift in Sources */,
 				2F7D15491EAE99CC000490A6 /* ErrorNotifiable.swift in Sources */,
+				2F89FE891EF5BE0500206A5D /* ExternalDataProcessor.swift in Sources */,
 				2F7D154B1EAE99CC000490A6 /* FolderRetreiveable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

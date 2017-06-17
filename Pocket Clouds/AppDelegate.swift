@@ -69,6 +69,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     {
         return self.orientationLock
     }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
+    {
+        firstResponderNeedsReload = true
+        if (!supportedFileTypes.contains(url.pathExtension)){return false}
+        if (Directory.currentpath == Directory.toplevel){Directory.processingPath = Directory.imports}
+        else {Directory.processingPath = Directory.currentpath}
+        DispatchQueue.global(qos: .userInitiated).async {ExternalDataProcessor.process(fileAtUrl: url)}
+        return true
+    }
+    
+    
     @objc private func showAuthentication()
     {
         self.authenticationView.authenticate()
