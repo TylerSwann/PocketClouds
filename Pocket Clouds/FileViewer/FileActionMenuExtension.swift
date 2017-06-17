@@ -21,12 +21,33 @@ extension FileViewController
         let exportToLibrary = UIAlertAction(title: "Export Images To library", style: .default, handler: {_ in self.exportToLibrary()})
         let loadingDemoButton = UIAlertAction(title: "Loading Demo", style: .default, handler: {_ in self.showLoadingDemo()})
         let zipButton = UIAlertAction(title: "Zip files", style: .default, handler: {_ in self.zipSelectedFiles()})
-        let buttons = [loadingDemoButton, exportToPCButton, exportToLibrary, zipButton, selectAllButton, cancelButton]
-        for button in buttons
-        {
-            actionsheet.addAction(button)
-        }
+        let duplicateButton = UIAlertAction(title: "Duplicate", style: .default, handler: {_ in self.duplicateClick()})
+        let buttons = [loadingDemoButton, exportToPCButton, exportToLibrary, zipButton, duplicateButton,selectAllButton, cancelButton]
+        buttons.forEach({button in actionsheet.addAction(button)})
         self.present(actionsheet, animated: true, completion: nil)
+    }
+    
+    func duplicateClick()
+    {
+        let selectedPaths = self.getPathsForSelectedIndexPaths()
+        guard selectedPaths.count > 0 else {return}
+        selectedPaths.forEach({path in
+            let filename = path.toURL().lastPathComponent
+            let fileExtension = path.toURL().pathExtension
+            var newFilename = filename.replacingOccurrences(of: ".\(fileExtension)", with: "-Copy")
+            var newFilePath = "\(path.replacingOccurrences(of: "/\(filename)", with: ""))/\(newFilename).\(fileExtension)"
+            if (fileExists(atPath: newFilePath))
+            {
+                newFilename = filename.replacingOccurrences(of: ".\(fileExtension)", with: "-Copy\(randomNumber())")
+                newFilePath = "\(path.replacingOccurrences(of: "/\(filename)", with: ""))/\(newFilename).\(fileExtension)"
+            }
+            do
+            {
+                try FileManager.default.copyItem(atPath: path, toPath: newFilePath)
+            }
+            catch let error {print(error)}
+        })
+        self.reloadCollectionView(reload: nil, completion: nil)
     }
     
     func zipSelectedFiles()
@@ -164,45 +185,21 @@ extension FileViewController
     
     func showLoadingDemo()
     {
-        let loadingRing = UIProgressRing(message: "Loading...", presentOn: self)
-        loadingRing.show()
-        var totalProgress = CGFloat(0)
-        for _ in 0...99
-        {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-                totalProgress += CGFloat(1)
-                loadingRing.setProgess(value: totalProgress, animationDuration: 0)
-            })
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {loadingRing.dismiss()})
-    }
-    
-//    func importFilesFromItunes()
-//    {
-//        
-//        let contents = contentsOfDirectory(atPath: Directory.systemDocuments, withSortingOption: nil)
-//        let filemanager = FileManager.default
-//        var completedCount = 0
-//        DispatchQueue.main.async
+        let loadingRing = UIInfiniteProgressRing(message: "Loading...", presentOn: self)
+        loadingRing.showAndAnimate()
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(7), execute: {loadingRing.dismissAndStopAnimation()})
+//        let loadingRing = UIProgressRing(message: "Loading...", presentOn: self)
+//        loadingRing.show()
+//        var totalProgress = CGFloat(0)
+//        for _ in 0...99
 //        {
-//            for content in contents
-//            {
-//                if (content == ".PocketClouds" || content == ".Support"){continue}
-//                else
-//                {
-//                    let path = "\(Directory.systemDocuments)/\(content)"
-//                    let savePath = "\(Directory.currentpath)/\(content)"
-//                    do
-//                    {
-//                        try filemanager.moveItem(atPath: path, toPath: savePath)
-//                    }
-//                    catch let error {print(error)}
-//                    completedCount += 1
-//                }
-//            }
-//
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+//                totalProgress += CGFloat(1)
+//                loadingRing.setProgess(value: totalProgress, animationDuration: 0)
+//            })
 //        }
-//    }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {loadingRing.dismiss()})
+    }
 }
 
 

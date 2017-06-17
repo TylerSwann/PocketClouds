@@ -19,6 +19,7 @@ class ImportViewController: CollectionViewController,
     private var doneButton: UIBarButtonItem!
     private var initialLoadingHasOccured = false
     private var progressRing: UIProgressRing!
+    private var loadingProgressRing: UIInfiniteProgressRing!
     
     
     override func viewDidLoad()
@@ -29,6 +30,8 @@ class ImportViewController: CollectionViewController,
         self.navigationItem.setRightBarButton(self.doneButton, animated: false)
         self.registerCellClass(ImportCell.self)
         self.collectionView.allowsMultipleSelection = true
+        self.loadingProgressRing = UIInfiniteProgressRing(message: "Loading..", presentOn: self)
+        self.loadingProgressRing.showAndAnimate()
     }
     
     override func viewDidAppear(_ animated: Bool)
@@ -43,6 +46,7 @@ class ImportViewController: CollectionViewController,
         self.assets = self.getViewableUserMediaAssets()
         self.initialLoadingHasOccured = true
         self.collectionView.reloadData()
+        self.loadingProgressRing.dismissAndStopAnimation()
     }
     
     private func fileForItem(atIndexPath indexPath: Int) -> ImportFile
@@ -57,6 +61,7 @@ class ImportViewController: CollectionViewController,
     
     @objc private func doneSelecting()
     {
+        Directory.processingPath = Directory.currentpath
         self.importSelectedAssets()
     }
     
@@ -70,9 +75,7 @@ class ImportViewController: CollectionViewController,
         self.progressRing = UIProgressRing(message: "Importing...", presentOn: self)
         progressRing.maxValue = CGFloat(self.selectedAssets.count)
         progressRing.show()
-        print("progress ring shown  \(currentDateAndTime())")
         DispatchQueue.global(qos: .userInitiated).async {
-            print("Entered global async  :  \(currentDateAndTime())")
             self.processAssetsForImport(assets: self.selectedAssets, perInterationCompletion: {
                 DispatchQueue.main.async {self.progressRing.iterationWasCompleted()}
             },completion: {

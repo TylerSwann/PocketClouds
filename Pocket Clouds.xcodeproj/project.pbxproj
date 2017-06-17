@@ -47,6 +47,7 @@
 		2F7D154E1EAE99CC000490A6 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D15431EAE99CC000490A6 /* Protocols.swift */; };
 		2F7D15511EAE99CC000490A6 /* UserLibraryRetreivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D15461EAE99CC000490A6 /* UserLibraryRetreivable.swift */; };
 		2F7D15531EAE9DB1000490A6 /* NetworkingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D15521EAE9DB1000490A6 /* NetworkingInfo.swift */; };
+		2F89FE871EF45ACB00206A5D /* UIInfiniteProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F89FE861EF45ACB00206A5D /* UIInfiniteProgressRing.swift */; };
 		2F8E966B1EE3214A000DBEAB /* TextEditorKeyboardAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8E966A1EE3214A000DBEAB /* TextEditorKeyboardAccessory.swift */; };
 		2FAAE00E1EE74056007C98BA /* UIAttributedActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAE00D1EE74056007C98BA /* UIAttributedActionSheet.swift */; };
 		2FAAE0101EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAAE00F1EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift */; };
@@ -115,6 +116,7 @@
 		2F7D15431EAE99CC000490A6 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Protocols.swift; path = "Pocket Clouds/Protocols/Protocols.swift"; sourceTree = SOURCE_ROOT; };
 		2F7D15461EAE99CC000490A6 /* UserLibraryRetreivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLibraryRetreivable.swift; sourceTree = "<group>"; };
 		2F7D15521EAE9DB1000490A6 /* NetworkingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkingInfo.swift; path = ../NetworkingInfo.swift; sourceTree = "<group>"; };
+		2F89FE861EF45ACB00206A5D /* UIInfiniteProgressRing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIInfiniteProgressRing.swift; sourceTree = "<group>"; };
 		2F8E966A1EE3214A000DBEAB /* TextEditorKeyboardAccessory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEditorKeyboardAccessory.swift; sourceTree = "<group>"; };
 		2FAAE00D1EE74056007C98BA /* UIAttributedActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAttributedActionSheet.swift; path = ../UIAttributedActionSheet.swift; sourceTree = "<group>"; };
 		2FAAE00F1EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAttributedActionSheetDelegate.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				2FAAE00F1EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift */,
 				2FAAE0111EE742E4007C98BA /* UIAttributedActionSheetCell.swift */,
 				2FAAE0131EE8C09D007C98BA /* UIBarSwitchItem.swift */,
+				2F89FE861EF45ACB00206A5D /* UIInfiniteProgressRing.swift */,
 			);
 			path = CustomUIElements;
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				2F4F70561EF2FF0B00F953B7 /* ImportViewController.swift in Sources */,
 				2FE695361EAFA4D1005A9937 /* AirlaunchServers.swift in Sources */,
 				2F4A75741ED4A1D900B25294 /* QueueViewController.swift in Sources */,
+				2F89FE871EF45ACB00206A5D /* UIInfiniteProgressRing.swift in Sources */,
 				2FF9E3361ED322A40038DD41 /* FileViewer.swift in Sources */,
 				2FAAE0141EE8C09D007C98BA /* UIBarSwitchItem.swift in Sources */,
 				2FAAE0101EE7412F007C98BA /* UIAttributedActionSheetDelegate.swift in Sources */,

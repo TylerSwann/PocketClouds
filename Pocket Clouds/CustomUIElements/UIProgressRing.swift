@@ -62,7 +62,7 @@ open class UIProgressRing
     open func iterationWasCompleted()
     {
         self.percentageComplete += self.onePercentOfMaxValue
-        self.setProgess(value: percentageComplete, animationDuration: 0.2)
+        self.setProgess(value: percentageComplete, animationDuration: 1.0)
     }
     
     open func setProgess(value: CGFloat, animationDuration: TimeInterval)

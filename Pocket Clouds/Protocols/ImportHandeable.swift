@@ -33,7 +33,7 @@ extension ImportHandeable
     {
         guard asset.mediaType == .image else {print("This asset is not an image!"); return}
         let options = PHImageRequestOptions()
-        let path = Directory.currentpath
+        let path = Directory.processingPath
         options.isSynchronous = true
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = false
@@ -72,7 +72,7 @@ extension ImportHandeable
         guard asset.mediaType == .video else {print("This is not a video asset"); return}
         let imageManager = PHImageManager()
         let options = PHVideoRequestOptions()
-        let path = Directory.currentpath
+        let path = Directory.processingPath
         var hasFinishedExportSession = false
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = false

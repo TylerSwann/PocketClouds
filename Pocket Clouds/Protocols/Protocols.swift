@@ -55,8 +55,6 @@ struct Directory
     static let systemDocuments = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0].toURL().path
     static let toplevel = "\(Directory.systemDocuments)/.PocketClouds"
     static let support = "\(Directory.systemDocuments)/.Support"
-    static let oldtoplevel = "\(Directory.systemDocuments)/PocketClouds"
-    static let oldsupport = "\(Directory.systemDocuments)/Support"
     static let thumbnails = "\(Directory.support)/Thumbnails"
     static let photoThumbnails = "\(Directory.thumbnails)/PhotoThumbnails"
     static let videoThumbnails = "\(Directory.thumbnails)/VideoThumbnails"
@@ -64,6 +62,7 @@ struct Directory
     static let temp = "\(Directory.support)/Temp"
     static let queue = "\(Directory.temp)/queue.plist"
     static var currentpath = "\(Directory.toplevel)"
+    static var processingPath = "\(Directory.toplevel)"
 }
 
 public func currentDateAndTime() -> String
@@ -79,6 +78,12 @@ public func currentDateAndTime() -> String
     let nanosecond = calender.component(.nanosecond, from: date)
     let currentDateAndTime = "\(month)/\(day)/\(year)  \(hour):\(minute):\(second):\(nanosecond)"
     return currentDateAndTime
+}
+public func randomNumber() -> String
+{
+    let date = Date()
+    let calender = Calendar.current
+    return "\(calender.component(.nanosecond, from: date))"
 }
 
 struct UserSettings
